@@ -75,11 +75,11 @@ export default function App(){
   return <div className="site-shell">
     <canvas ref={canvasRef} className="firework-canvas" aria-hidden="true"/>
     <header className="site-header">
-      <button className="wordmark" onClick={()=>navigate('home')} aria-label="Go home"><img src={diyaAsset} alt=""/><span>diwali,<i> at home.</i></span></button>
+      <button className="wordmark" onClick={()=>navigate('home')} aria-label="Go home"><img src={diyaAsset} alt=""/><span>Diwali <i>Universe</i></span></button>
       <nav className={menu?'main-nav open':'main-nav'} aria-label="Main navigation">
-        {(['home','celebrate','wishes','about'] as Section[]).map(s=><button key={s} className={section===s?'nav-active':''} onClick={()=>navigate(s)}>{s==='home'?'Home':s==='celebrate'?'Little lights':s==='wishes'?'Create & share':'For family'}</button>)}
+        {([{id:'home',label:'Home'},{id:'celebrate',label:'Little Lights'},{id:'wishes',label:'Create & Share'},{id:'about',label:'For Family'},{id:'home',label:'The Festival'}] as {id:Section;label:string}[]).map((item,i)=><button key={item.label} className={section===item.id && (i!==4)?'nav-active':''} onClick={()=>navigate(item.id)}>{item.label}</button>)}
       </nav>
-      <div className="header-actions"><button className="icon-button" onClick={()=>setDark(!dark)} aria-label="Toggle night mode">{dark?<Sun size={17}/>:<Moon size={17}/>}</button><button className="menu-button" onClick={()=>setMenu(!menu)} aria-label="Toggle menu">{menu?<X/>:<Menu/>}</button><button className="header-cta" onClick={()=>navigate('celebrate')}>Come celebrate <ArrowUpRight size={14}/></button></div>
+      <div className="header-actions"><button className="icon-button" onClick={()=>setDark(!dark)} aria-label="Toggle night mode">{dark?<Sun size={17}/>:<Moon size={17}/>}</button><button className="menu-button" onClick={()=>setMenu(!menu)} aria-label="Toggle menu">{menu?<X/>:<Menu/>}</button><button className="header-cta" onClick={()=>navigate('celebrate')}><Flame size={13}/> Light a Virtual Diya <ArrowUpRight size={14}/></button></div>
     </header>
     <AnimatePresence mode="wait">
       <motion.main key={section} initial={{opacity:0,y:12}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-8}} transition={{duration:.38,ease:[.22,.61,.36,1]}}>
@@ -94,31 +94,44 @@ export default function App(){
 }
 
 function Home({navigate,launch,lit,light}:{navigate:(s:Section)=>void;launch:()=>void;lit:number[];light:(i:number)=>void}){
-  const moments=[
-    {number:'01',eyebrow:'MAKE IT YOURS',title:'A little colour\nat the doorstep',copy:'A rangoli, made slowly and with love.',image:'https://images.unsplash.com/photo-1606293926075-69a00dbfde81?auto=format&fit=crop&w=900&q=85',alt:'Warm festive lamps and decorative Diwali details',action:()=>navigate('celebrate')},
-    {number:'02',eyebrow:'SOMETHING SWEET',title:'The good things\nwe share',copy:'A box of sweets. A second helping. Always.',image:'https://images.unsplash.com/photo-1605197589936-6c5f4f9c2b8b?auto=format&fit=crop&w=900&q=85',alt:'Indian festive sweets arranged for sharing',action:()=>navigate('wishes')},
-    {number:'03',eyebrow:'CLOSER TOGETHER',title:'A note for\nyour people',copy:'A few words can make someone feel home.',image:'https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=900&q=85',alt:'Family spending a warm moment together',action:()=>navigate('wishes')}
+  const ideas=[
+    {title:'Light One for Someone',copy:'Send a virtual diya and share a little positivity.',image:'https://images.pexels.com/photos/1693095/pexels-photo-1693095.jpeg?auto=compress&cs=tinysrgb&w=420',alt:'Golden festive lights glowing in the night',go:()=>navigate('celebrate')},
+    {title:'Send a Note, Not a Template',copy:'Write a heartfelt wish with our beautiful card editor.',image:'https://images.pexels.com/photos/1303081/pexels-photo-1303081.jpeg?auto=compress&cs=tinysrgb&w=420',alt:'A beautifully wrapped festive gift',go:()=>navigate('wishes')},
+    {title:'Leave a Little Light On',copy:'Explore simple ideas to make this Diwali more meaningful.',image:'https://images.pexels.com/photos/605588/pexels-photo-605588.jpeg?auto=compress&cs=tinysrgb&w=420',alt:'Colourful traditional rangoli decoration',go:()=>navigate('celebrate')}
   ];
-  return <div className="home-page">
-    <section className="home-hero page-width">
-      <div className="hero-note"><span className="hand-line"/> A LITTLE FESTIVE CORNER OF THE INTERNET</div>
-      <div className="hero-grid">
-        <div className="hero-copy"><p className="small-kicker">THE FESTIVAL OF LIGHTS <span>✳</span> HYDERABAD, INDIA</p><h1>Some nights<br/>are made for <em>light.</em></h1><p className="hero-intro">The house smells of sweets. Someone's fixing the rangoli. There's always one more diya to light. I wanted to keep a little of that feeling here.</p><div className="hero-buttons"><button className="button-plum" onClick={()=>navigate('celebrate')}>Light a diya <ArrowRight size={16}/></button><button className="button-text" onClick={launch}>Make a little sparkle <Sparkles size={15}/></button></div><div className="handwritten">A small Diwali project, made by Akhil <span>↗</span></div></div>
-        <div className="hero-art-wrap hero-photo-wrap"><figure className="hero-photo-frame"><img className="hero-photo" src="https://images.pexels.com/photos/34644588/pexels-photo-34644588.jpeg?cs=srgb&dl=pexels-suhashanjar-34644588.jpg&fm=jpg" alt="Traditional terracotta diyas glowing warmly in the evening, with soft reflections on the floor" fetchPriority="high"/><span className="photo-vignette" aria-hidden="true"></span><figcaption className="photo-caption"><span className="photo-caption-mark">✳</span><span><strong>THE LIGHT OF HOME</strong><small>A Diwali evening, in little moments</small></span></figcaption></figure><div className="photo-side-note">A FESTIVAL THAT FEELS LIKE HOME <a href="https://www.pexels.com/photo/traditional-diyas-illuminating-indian-festival-34644588/" target="_blank" rel="noreferrer">PHOTO: SUHAS HANJAR / PEXELS</a></div></div>
+  const shortcuts=[
+    {label:'For Home',sub:'Decor & ideas',icon:'🪔',go:()=>navigate('celebrate')},
+    {label:'For Family',sub:'Warm wishes',icon:'♔',go:()=>navigate('about')},
+    {label:'For Friends',sub:'Shareable cards',icon:'♧',go:()=>navigate('wishes')},
+    {label:'For Inspiration',sub:'Quotes & thoughts',icon:'♡',go:()=>navigate('wishes')},
+    {label:'For You',sub:'Small rituals',icon:'▦',go:()=>navigate('celebrate')}
+  ];
+  return <div className="home-page reference-home">
+    <section className="reference-hero">
+      <div className="reference-hero-photo" role="img" aria-label="A warm Diwali evening with glowing diyas, marigolds and rangoli"/>
+      <div className="reference-hero-shade"/>
+      <div className="reference-hero-inner page-width">
+        <div className="reference-hero-copy">
+          <span className="reference-eyebrow">A FESTIVE SPACE TO CELEBRATE THE FESTIVAL<br/>OF ETERNAL LIGHTS</span>
+          <h1>Some nights<br/>are made for<br/><em>light.</em></h1>
+          <p>The homes shine a little brighter, the hearts feel a little warmer, and hope finds its way back — that's the magic of Diwali.</p>
+          <div className="reference-hero-actions"><button className="reference-primary" onClick={()=>navigate('celebrate')}><Flame size={15}/> Light a Diya <ArrowRight size={15}/></button><button className="reference-secondary" onClick={()=>navigate('wishes')}><Send size={14}/> Share a Wish <ArrowUpRight size={14}/></button></div>
+        </div>
       </div>
-      <section className="home-lights-panel" aria-label="Little row of lights">
-        <div className="lights-panel-head"><span>THE LITTLE ROW OF LIGHTS</span><span>{lit.length} OF 5 LIT</span></div>
-        <div className="home-diya-row">{['For home','For family','For friends','For hope','For you'].map((label,i)=><button key={label} className={lit.includes(i)?'home-diya is-lit':'home-diya'} onClick={()=>light(i)} aria-pressed={lit.includes(i)}><span className="home-diya-icon"><svg viewBox="0 0 64 58" role="img" aria-label={lit.includes(i)?'Lit diya':'Unlit diya'}><path d="M32 5 C22 17 24 25 32 30 C40 25 42 17 32 5Z" fill={lit.includes(i)?'#f4a22a':'none'} stroke={lit.includes(i)?'#df8022':'#a88a75'} strokeWidth="2"/><path d="M8 33 Q18 27 32 30 Q46 27 56 33 Q53 48 32 49 Q11 48 8 33Z" fill={lit.includes(i)?'#0b765f':'none'} stroke={lit.includes(i)?'#0b765f':'#a88a75'} strokeWidth="2"/><path d="M11 35 Q32 42 53 35" fill="none" stroke={lit.includes(i)?'#ed4c99':'#a88a75'} strokeWidth="3"/><path d="M29 30 L29 26 L35 26 L35 30" fill="none" stroke={lit.includes(i)?'#b87933':'#a88a75'} strokeWidth="1.5"/></svg></span><span className="home-diya-label">{label}</span><span className="home-diya-state">{lit.includes(i)?'LIGHTED':'TAP TO LIGHT'}</span></button>)}</div>
-        <div className="lights-panel-foot"><span>A little light goes a long way.</span><button onClick={()=>{for(let i=0;i<5;i++)if(!lit.includes(i))light(i)}}>Light them all <Flame size={15}/></button></div>
-      </section>
-      <div className="hero-bottom"><span>SCROLL A LITTLE</span><ArrowDown size={14}/><span className="bottom-note">No rush. Stay for a moment.</span></div>
+      <div className="reference-shortcuts page-width">{shortcuts.map((item,i)=><button key={item.label} className="reference-shortcut" onClick={item.go}><span className="shortcut-icon">{item.icon}</span><strong>{item.label}</strong><small>{item.sub}</small></button>)}</div>
     </section>
-    <section className="moments-section page-width">
-      <div className="moments-heading"><div><span className="section-number">01 — THE FESTIVAL, IN LITTLE MOMENTS</span><h2>Made of moments.<br/>Kept <em>close to heart.</em></h2></div><p>From the first diya at the door to the last sweet shared at the table, it's the little things that make the evening.</p></div>
-      <div className="moment-cards">{moments.map(m=><button className="moment-card" key={m.number} onClick={m.action}><span className="moment-image-wrap"><img src={m.image} alt={m.alt} loading="lazy"/><span className="moment-number">{m.number}</span><span className="moment-arrow"><ArrowUpRight size={18}/></span></span><span className="moment-meta">{m.eyebrow}</span><strong>{m.title}</strong><small>{m.copy}</small></button>)}</div>
+    <section className="reference-ideas page-width">
+      <div className="reference-ideas-copy"><span className="reference-section-kicker">IDEAS, TOOLS & INSPIRATION</span><h2>It’s the small<br/>things that make<br/><em>the evening.</em></h2><p>From a single diya to a thoughtful message, Diwali is about the little moments that bring us closer.</p></div>
+      <div className="reference-idea-list">{ideas.map((idea,i)=><button className="reference-idea" key={idea.title} onClick={idea.go}><img src={idea.image} alt={idea.alt} loading="lazy"/><span className="reference-idea-copy"><strong>{idea.title}</strong><small>{idea.copy}</small></span><span className="reference-idea-arrow"><ArrowRight size={17}/></span></button>)}</div>
     </section>
-    <section className="projects-section"><div className="page-width projects-inner"><div className="section-intro"><span className="section-number">02 — THINGS I'VE BEEN MAKING</span><h2>A little design.<br/>A little <em>code.</em></h2><p>When I'm not making festive things, I'm usually making tools for designers or trying to make the next idea real.</p></div><div className="project-cards">{projects.map((p,i)=><a className={'project-card '+p.tone} key={p.name} href={p.url} target="_blank" rel="noreferrer"><span className="project-count">0{i+1}</span><span className="project-symbol">{p.mark}</span><strong>{p.name}</strong><small>{p.kind}</small><ArrowUpRight className="project-arrow"/></a>)}</div></div></section>
-    <section className="closing-note page-width"><Rangoli/><p>Wherever you are,<br/><em>may there be light.</em></p><span>HAPPY DIWALI · WITH LOVE, AKHIL</span><button className="button-plum" onClick={()=>navigate('wishes')}>Send someone a wish <Send size={15}/></button></section>
+    <section className="reference-project-section">
+      <div className="reference-project-inner page-width">
+        <div className="reference-project-copy"><span className="reference-section-kicker">DESIGN, CREATE & CELEBRATE</span><h2>A little design.<br/>A little <em>code.</em></h2><p>Interactive tools and creative mini-projects inspired by the spirit of Diwali.</p></div>
+        <div className="reference-project-grid">{projects.map((p,i)=><a className={'reference-project-card '+p.tone} key={p.name} href={p.url} target="_blank" rel="noreferrer"><span className="reference-project-mark">{p.mark}</span><strong>{p.name}</strong><small>{i===0?'Explore Diwali typography':i===1?'A creative workspace for designers':i===2?'Preview your festive packaging':'Build festive projects with AI'} <ArrowUpRight size={13}/></small></a>)}</div>
+      </div>
+      <div className="reference-bottom-diya"><Rangoli small/><img src={diyaAsset} alt="A glowing diya at the centre of a rangoli"/></div>
+    </section>
+    <section className="reference-closing page-width"><span>WISHING YOU LIGHT, LOVE & NEW BEGINNINGS</span><h2>May your world<br/><em>glow a little brighter.</em></h2><button className="reference-primary" onClick={()=>navigate('wishes')}>Create a Diwali Wish <ArrowRight size={15}/></button></section>
   </div>
 }
 

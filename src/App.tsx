@@ -20,30 +20,32 @@ function useFireworks(active:boolean,canvasRef:RefObject<HTMLCanvasElement|null>
   const onBurstRef=useRef(onBurst)
   onBurstRef.current=onBurst
   const rockets=useRef<{x:number;y:number;tx:number;ty:number;speed:number;hue:number}[]>([])
+  const startRef=useRef<()=>void>(()=>{})
   useEffect(()=>{
     const canvas=canvasRef.current
     if(!canvas)return
     const ctx=canvas.getContext('2d')
     if(!ctx)return
-    let frame=0,raf=0
+    let frame=0,raf=0,running=false
     const resize=()=>{const dpr=Math.min(window.devicePixelRatio||1,2);canvas.width=innerWidth*dpr;canvas.height=innerHeight*dpr;canvas.style.width=innerWidth+'px';canvas.style.height=innerHeight+'px';ctx.setTransform(dpr,0,0,dpr,0,0)}
-    resize();window.addEventListener('resize',resize)
-    const burst=(x:number,y:number,hue:number)=>{const count=38+Math.floor(Math.random()*26);for(let i=0;i<count;i++){const a=Math.random()*Math.PI*2,s=1+Math.random()*4.2;particles.current.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:48+Math.random()*35,max:83,hue:hue+Math.random()*34-17,size:1+Math.random()*2.1,trail:[]})}}
+    const burst=(x:number,y:number,hue:number)=>{const count=38+Math.floor(Math.random()*26);for(let i=0;i<count;i++){const angle=Math.random()*Math.PI*2,speed=1+Math.random()*4.2;particles.current.push({x,y,vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed,life:48+Math.random()*35,max:83,hue:hue+Math.random()*34-17,size:1+Math.random()*2.1,trail:[]})}}
     const loop=()=>{
       frame++
       ctx.clearRect(0,0,innerWidth,innerHeight)
       if(active&&frame%18===0)rockets.current.push({x:innerWidth*(.16+Math.random()*.68),y:innerHeight+10,tx:innerWidth*(.15+Math.random()*.7),ty:innerHeight*(.12+Math.random()*.48),speed:7+Math.random()*3,hue:[35,330,155,18][Math.floor(Math.random()*4)]})
       rockets.current=rockets.current.filter(r=>{const dx=r.tx-r.x,dy=r.ty-r.y,d=Math.hypot(dx,dy);if(d<r.speed+4){burst(r.x,r.y,r.hue);onBurstRef.current();return false}r.x+=dx/d*r.speed;r.y+=dy/d*r.speed;ctx.beginPath();ctx.arc(r.x,r.y,2,0,Math.PI*2);ctx.fillStyle='hsl('+r.hue+' 90% 72%)';ctx.fill();return true})
       particles.current=particles.current.filter(p=>p.life>0)
-      for(const p of particles.current){p.trail.push({x:p.x,y:p.y});if(p.trail.length>4)p.trail.shift();p.x+=p.vx;p.y+=p.vy;p.vy+=.045;p.vx*=.985;p.life--;ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fillStyle='hsla('+p.hue+' 92% 70% / '+Math.max(0,p.life/p.max)+')';ctx.fill()}
-      raf=requestAnimationFrame(loop)
+      for(const p of particles.current){p.x+=p.vx;p.y+=p.vy;p.vy+=.045;p.vx*=.985;p.life--;ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fillStyle='hsla('+p.hue+' 92% 70% / '+Math.max(0,p.life/p.max)+')';ctx.fill()}
+      if(active||particles.current.length||rockets.current.length){raf=requestAnimationFrame(loop)}else{running=false;ctx.clearRect(0,0,innerWidth,innerHeight)}
     }
-    loop()
-    const click=(e:PointerEvent)=>{if(!active&&!document.querySelector('.celebrate-page'))return;if((e.target as HTMLElement)?.closest('button,a,input,select,textarea'))return;burst(e.clientX,e.clientY,[38,330,160,22][Math.floor(Math.random()*4)]);onBurstRef.current()}
-    window.addEventListener('pointerdown',click)
-    return()=>{cancelAnimationFrame(raf);window.removeEventListener('resize',resize);window.removeEventListener('pointerdown',click)}
+    const start=()=>{if(running)return;running=true;raf=requestAnimationFrame(loop)}
+    startRef.current=start
+    const click=(e:PointerEvent)=>{if(!active&&!document.querySelector('.celebrate-page'))return;if((e.target as HTMLElement)?.closest('button,a,input,select,textarea'))return;burst(e.clientX,e.clientY,[38,330,160,22][Math.floor(Math.random()*4)]);onBurstRef.current();start()}
+    resize();window.addEventListener('resize',resize);window.addEventListener('pointerdown',click)
+    if(active)start()
+    return()=>{cancelAnimationFrame(raf);running=false;startRef.current=()=>{};window.removeEventListener('resize',resize);window.removeEventListener('pointerdown',click)}
   },[active,canvasRef])
-  return ()=>{const x=innerWidth*(.2+Math.random()*.6),y=innerHeight*(.15+Math.random()*.35);const hue=[35,330,155,18][Math.floor(Math.random()*4)];for(let i=0;i<48;i++){const a=Math.random()*Math.PI*2,s=1+Math.random()*4;particles.current.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:55,max:55,hue,size:1+Math.random()*2,trail:[]})}onBurstRef.current()}
+  return ()=>{const x=innerWidth*(.2+Math.random()*.6),y=innerHeight*(.15+Math.random()*.35),hue=[35,330,155,18][Math.floor(Math.random()*4)];for(let i=0;i<48;i++){const angle=Math.random()*Math.PI*2,speed=1+Math.random()*4;particles.current.push({x,y,vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed,life:55,max:55,hue,size:1+Math.random()*2,trail:[]})}startRef.current();onBurstRef.current()}
 }
 
 function Rangoli({small=false}:{small?:boolean}) {
@@ -56,13 +58,13 @@ function Rangoli({small=false}:{small?:boolean}) {
 }
 
 export default function App(){
-  const [section,setSection]=useState<Section>(()=>location.hash.replace('#','') as Section||'home')
+  const [section,setSection]=useState<Section>(()=>{const candidate=location.hash.slice(1);return ['home','celebrate','wishes','about'].includes(candidate)?candidate as Section:'home'})
   const [menu,setMenu]=useState(false),[lit,setLit]=useState<number[]>([0]),[continuous,setContinuous]=useState(false)
   const [sound,setSound]=useState(true),[volume,setVolume]=useState(.25),[to,setTo]=useState(''),[from,setFrom]=useState('Akhil')
   const [tone,setTone]=useState('heartfelt'),[wish,setWish]=useState(''),[copied,setCopied]=useState(false),[dark,setDark]=useState(false)
   const canvasRef=useRef<HTMLCanvasElement>(null)
   const audio=useRef<AudioContext|null>(null)
-  useEffect(()=>{const onHash=()=>setSection((location.hash.replace('#','') as Section)||'home');window.addEventListener('hashchange',onHash);return()=>window.removeEventListener('hashchange',onHash)},[])
+  useEffect(()=>{const onHash=()=>{const candidate=location.hash.slice(1);setSection(['home','celebrate','wishes','about'].includes(candidate)?candidate as Section:'home')};window.addEventListener('hashchange',onHash);return()=>window.removeEventListener('hashchange',onHash)},[])
   useEffect(()=>{document.body.classList.toggle('night-mode',dark);return()=>document.body.classList.remove('night-mode')},[dark])
   const navigate=(s:Section)=>{setSection(s);location.hash=s==='home'?'':'#'+s;setMenu(false);window.scrollTo({top:0,behavior:'smooth'})}
   const light=(i:number)=>setLit(old=>old.includes(i)?old.filter(x=>x!==i):[...old,i])
@@ -77,7 +79,7 @@ export default function App(){
     <header className="site-header">
       <button className="wordmark" onClick={()=>navigate('home')} aria-label="Go home"><img src={diyaAsset} alt=""/><span>Diwali <i>Universe</i></span></button>
       <nav className={menu?'main-nav open':'main-nav'} aria-label="Main navigation">
-        {([{id:'home',label:'Home'},{id:'celebrate',label:'Little Lights'},{id:'wishes',label:'Create & Share'},{id:'about',label:'For Family'},{id:'home',label:'The Festival'}] as {id:Section;label:string}[]).map((item,i)=><button key={item.label} className={section===item.id && (i!==4)?'nav-active':''} onClick={()=>navigate(item.id)}>{item.label}</button>)}
+        {([{id:'home',label:'Home'},{id:'celebrate',label:'Little Lights'},{id:'wishes',label:'Create & Share'},{id:'about',label:'Our Story'}] as {id:Section;label:string}[]).map((item,i)=><button key={item.label} className={section===item.id && (i!==4)?'nav-active':''} onClick={()=>navigate(item.id)}>{item.label}</button>)}
       </nav>
       <div className="header-actions"><button className="icon-button" onClick={()=>setDark(!dark)} aria-label="Toggle night mode">{dark?<Sun size={17}/>:<Moon size={17}/>}</button><button className="menu-button" onClick={()=>setMenu(!menu)} aria-label="Toggle menu">{menu?<X/>:<Menu/>}</button><button className="header-cta" onClick={()=>navigate('celebrate')}><Flame size={13}/> Light a Virtual Diya <ArrowUpRight size={14}/></button></div>
     </header>
@@ -100,11 +102,11 @@ function Home({navigate}:{navigate:(s:Section)=>void}){
     {title:'Leave a Little Light On',copy:'Explore simple ideas to make this Diwali more meaningful.',image:'https://www.uel.ac.uk/sites/default/files/2025-10/AdobeStock_465253019.jpeg',alt:'Colourful traditional rangoli decoration',go:()=>navigate('celebrate')}
   ];
   const shortcuts=[
-    {label:'For Home',sub:'Decor & ideas',icon:<Flame size={29}/>,go:()=>navigate('celebrate')},
-    {label:'For Family',sub:'Warm wishes',icon:<Gift size={29}/>,go:()=>navigate('about')},
-    {label:'For Friends',sub:'Shareable cards',icon:<Users size={29}/>,go:()=>navigate('wishes')},
-    {label:'For Inspiration',sub:'Quotes & thoughts',icon:<Heart size={29}/>,go:()=>navigate('wishes')},
-    {label:'For You',sub:'Small rituals',icon:<CalendarDays size={27}/>,go:()=>navigate('celebrate')}
+    {label:'Light a Diya',sub:'A small ritual',icon:<Flame size={29}/>,go:()=>navigate('celebrate')},
+    {label:'Our Story',sub:'Meet the maker',icon:<Gift size={29}/>,go:()=>navigate('about')},
+    {label:'Send a Wish',sub:'A note for someone',icon:<Users size={29}/>,go:()=>navigate('wishes')},
+    {label:'Festival Ideas',sub:'Little ways to celebrate',icon:<Heart size={29}/>,go:()=>document.getElementById('festival-ideas')?.scrollIntoView({behavior:'smooth'})},
+    {label:'Little Lights',sub:'Make a moment',icon:<CalendarDays size={27}/>,go:()=>navigate('celebrate')}
   ];
   return <div className="home-page reference-home">
     <section className="reference-hero">
@@ -120,7 +122,7 @@ function Home({navigate}:{navigate:(s:Section)=>void}){
       </div>
       <div className="reference-shortcuts page-width">{shortcuts.map(item=><button key={item.label} className="reference-shortcut" onClick={item.go}><span className="shortcut-icon">{item.icon}</span><strong>{item.label}</strong><small>{item.sub}</small></button>)}</div>
     </section>
-    <section className="reference-ideas page-width">
+    <section className="reference-ideas page-width" id="festival-ideas">
       <div className="reference-ideas-copy"><span className="reference-section-kicker">IDEAS, TOOLS & INSPIRATION</span><h2>It’s the small<br/>things that make<br/><em>the evening.</em></h2><p>From a single diya to a thoughtful message, Diwali is about the little moments that bring us closer.</p></div>
       <div className="reference-idea-list">{ideas.map(idea=><button className="reference-idea" key={idea.title} onClick={idea.go}><img src={idea.image} alt={idea.alt} loading="lazy"/><span className="reference-idea-copy"><strong>{idea.title}</strong><small>{idea.copy}</small></span><span className="reference-idea-arrow"><ArrowRight size={17}/></span></button>)}</div>
     </section>

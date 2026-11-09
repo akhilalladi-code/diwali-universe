@@ -84,12 +84,10 @@ export default function DiwaliScene() {
 
     const dustCount = 130
     const dustPositions = new Float32Array(dustCount * 3)
-    const dustSizes = new Float32Array(dustCount)
     for (let i = 0; i < dustCount; i++) {
       dustPositions[i * 3] = (Math.random() - 0.5) * 7
       dustPositions[i * 3 + 1] = (Math.random() - 0.5) * 5
       dustPositions[i * 3 + 2] = (Math.random() - 0.5) * 2
-      dustSizes[i] = 0.5 + Math.random() * 1.4
     }
     const dustGeometry = new THREE.BufferGeometry()
     dustGeometry.setAttribute('position', new THREE.BufferAttribute(dustPositions, 3))

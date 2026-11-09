@@ -42,7 +42,7 @@ function useFireworks(active:boolean,canvasRef:RefObject<HTMLCanvasElement|null>
     startRef.current=start
     const click=(e:PointerEvent)=>{if(!active&&!document.querySelector('.celebrate-page'))return;if((e.target as HTMLElement)?.closest('button,a,input,select,textarea'))return;burst(e.clientX,e.clientY,[38,330,160,22][Math.floor(Math.random()*4)]);onBurstRef.current();start()}
     resize();window.addEventListener('resize',resize);window.addEventListener('pointerdown',click)
-    if(active)start()
+    if(active||particles.current.length||rockets.current.length)start()
     return()=>{cancelAnimationFrame(raf);running=false;startRef.current=()=>{};window.removeEventListener('resize',resize);window.removeEventListener('pointerdown',click)}
   },[active,canvasRef])
   return ()=>{const x=innerWidth*(.2+Math.random()*.6),y=innerHeight*(.15+Math.random()*.35),hue=[35,330,155,18][Math.floor(Math.random()*4)];for(let i=0;i<48;i++){const angle=Math.random()*Math.PI*2,speed=1+Math.random()*4;particles.current.push({x,y,vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed,life:55,max:55,hue,size:1+Math.random()*2,trail:[]})}startRef.current();onBurstRef.current()}
@@ -72,7 +72,18 @@ export default function App(){
   const playFireworkSound=()=>{if(!sound)return;try{const Ctx=window.AudioContext||((window as unknown as {webkitAudioContext?:typeof AudioContext}).webkitAudioContext);if(!Ctx)return;audio.current??=new Ctx();const c=audio.current;void c.resume();const now=c.currentTime;const boom=c.createOscillator(),boomGain=c.createGain();boom.type='sine';boom.frequency.setValueAtTime(125,now);boom.frequency.exponentialRampToValueAtTime(42,now+.42);boomGain.gain.setValueAtTime(Math.max(.0001,volume*.42),now);boomGain.gain.exponentialRampToValueAtTime(.0001,now+.46);boom.connect(boomGain);boomGain.connect(c.destination);boom.start(now);boom.stop(now+.48);const length=Math.floor(c.sampleRate*.32),buffer=c.createBuffer(1,length,c.sampleRate),data=buffer.getChannelData(0);for(let i=0;i<length;i++)data[i]=(Math.random()*2-1)*(1-i/length);const noise=c.createBufferSource(),filter=c.createBiquadFilter(),crackleGain=c.createGain();noise.buffer=buffer;filter.type='bandpass';filter.frequency.value=1500;filter.Q.value=.7;crackleGain.gain.setValueAtTime(Math.max(.0001,volume*.18),now);crackleGain.gain.exponentialRampToValueAtTime(.0001,now+.3);noise.connect(filter);filter.connect(crackleGain);crackleGain.connect(c.destination);noise.start(now);noise.stop(now+.32)}catch{/* Audio is an optional enhancement. */}}
   const launch=useFireworks(continuous,canvasRef,playFireworkSound)
   const makeWish=()=>{const name=to.trim();const greeting=name?`, ${name}`:'';const lines=tone==='joyful'?[`Happy Diwali${greeting}!`,'Hope the house is full of laughter, the sweets disappear too quickly, and the year ahead brings lovely surprises.']:tone==='simple'?[`A beautiful Diwali${name?` to you, ${name}`:''}.`,'Wishing you peace at home, light in your heart, and good things in the days ahead.']:[`Thinking of you this Diwali${greeting}.`,'May there be warmth around your table, familiar voices at your door, and enough little moments to remember long after the lights come down.'];setWish(lines.join('\n\n'))}
-  const copyWish=async()=>{try{await navigator.clipboard.writeText(`${wish}\n\nWith love, ${from||'Akhil'}`);setCopied(true);setTimeout(()=>setCopied(false),1800)}catch{setCopied(false)}}
+  const copyWish=async()=>{
+    const text=wish+'\n\nWith love, '+(from||'Akhil')
+    try{
+      if(!navigator.clipboard||!window.isSecureContext)throw new Error('Clipboard API unavailable')
+      await navigator.clipboard.writeText(text)
+      setCopied(true);window.setTimeout(()=>setCopied(false),1800)
+    }catch{
+      const field=document.createElement('textarea');field.value=text;field.setAttribute('readonly','');field.style.position='fixed';field.style.opacity='0';document.body.appendChild(field);field.select()
+      const ok=document.execCommand('copy');field.remove()
+      if(ok){setCopied(true);window.setTimeout(()=>setCopied(false),1800)}else window.prompt('Copy your Diwali greeting:',text)
+    }
+  }
   const greeting=wish||'May there be warmth around your table, familiar voices at your door, and enough little moments to remember long after the lights come down.'
   return <div className="site-shell">
     <canvas ref={canvasRef} className="firework-canvas" aria-hidden="true"/>

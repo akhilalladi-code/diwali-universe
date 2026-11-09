@@ -253,3 +253,94 @@ button:focus-visible,a:focus-visible,input:focus-visible{
   html{scroll-behavior:auto}
   *,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
+
+
+/* Photographic Diwali direction — grounded, warm and tactile */
+.hero-photo-wrap{
+  height:auto!important;
+  min-height:520px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:stretch;
+  gap:14px;
+  position:relative;
+  padding:12px 0 10px;
+}
+.hero-photo-frame{
+  margin:0;
+  width:100%;
+  height:clamp(420px,43vw,570px);
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+  background:#24140f;
+  border:1px solid rgba(107,69,42,.28);
+  box-shadow:0 22px 60px rgba(72,42,25,.16),0 3px 12px rgba(72,42,25,.10);
+}
+.hero-photo{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center 55%;
+  transform:scale(1.015);
+  filter:saturate(.9) contrast(1.06) brightness(.92);
+  transition:transform 1.2s cubic-bezier(.2,.65,.25,1),filter .6s ease;
+}
+.hero-photo-frame:hover .hero-photo{transform:scale(1.055);filter:saturate(1) contrast(1.08) brightness(.98)}
+.photo-vignette{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  background:linear-gradient(180deg,rgba(18,10,7,.04) 25%,rgba(18,10,7,.08) 48%,rgba(18,10,7,.78) 100%),linear-gradient(90deg,rgba(18,10,7,.12),transparent 42%);
+}
+.photo-caption{
+  position:absolute;
+  z-index:2;
+  left:clamp(18px,3vw,32px);
+  right:clamp(18px,3vw,32px);
+  bottom:clamp(20px,3vw,30px);
+  display:flex;
+  align-items:center;
+  gap:14px;
+  color:#fff4e6;
+}
+.photo-caption-mark{
+  width:38px;height:38px;display:grid;place-items:center;
+  border:1px solid rgba(255,244,230,.55);border-radius:50%;
+  color:#f3bd70;font-size:17px;flex:none;
+}
+.photo-caption strong,.photo-caption small{display:block}
+.photo-caption strong{font-size:9px;letter-spacing:2px;font-weight:600}
+.photo-caption small{margin-top:6px;font:italic 14px var(--serif);color:rgba(255,244,230,.82)}
+.photo-side-note{
+  display:flex;justify-content:space-between;gap:12px;
+  color:#8b7464;font-size:8px;letter-spacing:1.45px;
+  padding:0 2px;
+}
+.photo-side-note span{color:#a48c78}
+.hero-photo-wrap .paper-circle,.hero-photo-wrap .hero-sticker,.hero-photo-wrap .hero-diya-art,
+.hero-photo-wrap .art-caption,.hero-photo-wrap .tiny-star{display:none}
+.hero-grid{align-items:center}
+.hero-copy{position:relative;z-index:2}
+.hero-copy h1{max-width:570px}
+.hero-intro{max-width:390px}
+@media(min-width:1100px){
+  .hero-grid{grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);gap:clamp(34px,5vw,76px)}
+  .hero-photo-wrap{min-height:590px}
+}
+@media(max-width:900px){
+  .hero-photo-wrap{min-height:0;padding:8px 0 4px}
+  .hero-photo-frame{height:clamp(320px,66vw,470px)}
+  .hero-photo{object-position:center 52%}
+}
+@media(max-width:640px){
+  .hero-photo-frame{height:390px}
+  .photo-caption{left:18px;right:18px;bottom:18px}
+  .photo-side-note{font-size:7px;letter-spacing:1px}
+}
+@media(prefers-reduced-motion:reduce){
+  .hero-photo{transition:none}
+}

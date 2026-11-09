@@ -79,7 +79,7 @@ export default function App(){
   const launch=useFireworks(continuous,canvasRef,playFireworkSound,Boolean(reduceMotion))
   const makeWish=()=>{const name=to.trim();const greeting=name?`, ${name}`:'';const lines=tone==='joyful'?[`Happy Diwali${greeting}!`,'Hope the house is full of laughter, the sweets disappear too quickly, and the year ahead brings lovely surprises.']:tone==='simple'?[`A beautiful Diwali${name?` to you, ${name}`:''}.`,'Wishing you peace at home, light in your heart, and good things in the days ahead.']:[`Thinking of you this Diwali${greeting}.`,'May there be warmth around your table, familiar voices at your door, and enough little moments to remember long after the lights come down.'];setWish(lines.join('\n\n'))}
   const copyWish=async()=>{
-    const text=wish+'\n\nWith love, '+(from||'Akhil')
+    const text=(wish||'May there be warmth around your table, familiar voices at your door, and enough little moments to remember long after the lights come down.')+'\n\nWith love, '+(from.trim()||'Akhil')
     try{
       if(!navigator.clipboard||!window.isSecureContext)throw new Error('Clipboard API unavailable')
       await navigator.clipboard.writeText(text)

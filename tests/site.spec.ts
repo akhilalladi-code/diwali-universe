@@ -1,14 +1,14 @@
 import { expect, test } from '@playwright/test'
 
 test('home page renders and primary navigation works', async ({ page }) => {
-  await page.goto('/')
+  await page.goto('/diwali-universe/')
   await expect(page.getByRole('heading', { name: /some nights/i })).toBeVisible()
   await page.getByRole('button', { name: /light a diya/i }).first().click()
   await expect(page.getByRole('heading', { name: /one flame at a time/i })).toBeVisible()
 })
 
 test('diya ritual supports individual lighting, all-on and reset', async ({ page }) => {
-  await page.goto('/#celebrate')
+  await page.goto('/diwali-universe/#celebrate')
   const familyDiya = page.getByRole('button', { name: /for family/i })
   await expect(familyDiya).toHaveAttribute('aria-pressed', 'false')
   await familyDiya.click()
@@ -21,7 +21,7 @@ test('diya ritual supports individual lighting, all-on and reset', async ({ page
 
 test('greeting preview fallback can be copied and a generated greeting exported', async ({ page, context }) => {
   await context.grantPermissions(['clipboard-read', 'clipboard-write'])
-  await page.goto('/#wishes')
+  await page.goto('/diwali-universe/#wishes')
   await page.getByRole('button', { name: /copy this little note/i }).click()
   const initialCopy = await page.evaluate(() => navigator.clipboard.readText())
   expect(initialCopy).toContain('May there be warmth around your table')
@@ -36,7 +36,7 @@ test('greeting preview fallback can be copied and a generated greeting exported'
 
 test('mobile navigation remains readable in dark mode', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
-  await page.goto('/')
+  await page.goto('/diwali-universe/')
   await page.getByRole('button', { name: /toggle menu/i }).click()
   await page.getByRole('button', { name: /toggle night mode/i }).click()
   const nav = page.getByRole('navigation', { name: /main navigation/i })
@@ -47,7 +47,7 @@ test('mobile navigation remains readable in dark mode', async ({ page }) => {
 
 test('reduced-motion preference disables fireworks animation controls', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' })
-  await page.goto('/#celebrate')
+  await page.goto('/diwali-universe/#celebrate')
   await expect(page.getByRole('button', { name: /a little sparkle/i })).toBeDisabled()
   await expect(page.getByRole('button', { name: /keep them coming/i })).toBeDisabled()
   await expect(page.getByText(/paused because your device prefers reduced motion/i)).toBeVisible()

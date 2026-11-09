@@ -43,7 +43,7 @@ function useFireworks(active:boolean,canvasRef:RefObject<HTMLCanvasElement|null>
     window.addEventListener('pointerdown',click)
     return()=>{cancelAnimationFrame(raf);window.removeEventListener('resize',resize);window.removeEventListener('pointerdown',click)}
   },[active,canvasRef])
-  return ()=>{const x=innerWidth*(.2+Math.random()*.6),y=innerHeight*(.15+Math.random()*.35);const hue=[35,330,155,18][Math.floor(Math.random()*4)];for(let i=0;i<48;i++){const a=Math.random()*Math.PI*2,s=1+Math.random()*4;particles.current.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:55,max:55,hue,size:1+Math.random()*2,trail:[]})}}
+  return ()=>{const x=innerWidth*(.2+Math.random()*.6),y=innerHeight*(.15+Math.random()*.35);const hue=[35,330,155,18][Math.floor(Math.random()*4)];for(let i=0;i<48;i++){const a=Math.random()*Math.PI*2,s=1+Math.random()*4;particles.current.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:55,max:55,hue,size:1+Math.random()*2,trail:[]})}onBurstRef.current()}
 }
 
 function Rangoli({small=false}:{small?:boolean}) {
@@ -115,7 +115,7 @@ function Home({navigate,launch,lit,light}:{navigate:(s:Section)=>void;launch:()=
 }
 
 function Celebrate({lit,light,playChime,playFireworkSound,continuous,setContinuous,launch,sound,setSound,volume,setVolume}:{lit:number[];light:(i:number)=>void;playChime:()=>void;playFireworkSound:()=>void;continuous:boolean;setContinuous:(v:boolean)=>void;launch:()=>void;sound:boolean;setSound:(v:boolean)=>void;volume:number;setVolume:(v:number)=>void}){
-  return <section className="celebrate-page page-width"><div className="page-heading"><span className="section-number">A SMALL RITUAL</span><h1>One flame at<br/><em>a time.</em></h1><p>Tap a diya to light it. Nothing more complicated than that.</p></div><div className="diya-ritual"><div className="ritual-top"><span>THE LITTLE ROW OF LIGHTS</span><span>{lit.length} OF 5 LIT</span></div><div className="diya-row">{Array.from({length:5},(_,i)=><button key={i} className={lit.includes(i)?'ritual-diya is-lit':'ritual-diya'} onClick={()=>{light(i);playChime()}} aria-pressed={lit.includes(i)}><span className="ritual-flame"/><img src={diyaAsset} alt=""/><small>{['For home','For family','For friends','For hope','For you'][i]}</small></button>)}</div><div className="ritual-bottom"><span>{lit.length===5?'All five are glowing. Keep that feeling.':'A little light goes a long way.'}</span><button onClick={()=>{for(let i=0;i<5;i++)if(!lit.includes(i))light(i)}}>Light them all <Flame size={14}/></button></div></div><div className="firework-invite"><div><span className="section-number">WHEN THE SKY GETS DARK</span><h2>Shall we make<br/>a little <em>noise?</em></h2><p>Turn on a few fireworks. Tap the open space to make your own bursts.</p></div><div className="firework-actions"><button className="button-plum" onClick={()=>{launch();playFireworkSound()}}>A little sparkle <Sparkles size={15}/></button><button className={continuous?'button-outline selected':'button-outline'} onClick={()=>setContinuous(!continuous)}>{continuous?<Pause size={14}/>:<Play size={14}/>} {continuous?'Pause the sky':'Keep them coming'}</button><button className="button-outline" onClick={()=>setSound(!sound)}>{sound?<Volume2 size={14}/>:<VolumeX size={14}/>} Sound {sound?'on':'off'}</button>{sound&&<label className="volume-control">A little softer <input aria-label="Sound volume" type="range" min="0" max="1" step=".05" value={volume} onChange={e=>setVolume(Number(e.target.value))}/></label>}</div></div></section>
+  return <section className="celebrate-page page-width"><div className="page-heading"><span className="section-number">A SMALL RITUAL</span><h1>One flame at<br/><em>a time.</em></h1><p>Tap a diya to light it. Nothing more complicated than that.</p></div><div className="diya-ritual"><div className="ritual-top"><span>THE LITTLE ROW OF LIGHTS</span><span>{lit.length} OF 5 LIT</span></div><div className="diya-row">{Array.from({length:5},(_,i)=><button key={i} className={lit.includes(i)?'ritual-diya is-lit':'ritual-diya'} onClick={()=>{light(i);playChime()}} aria-pressed={lit.includes(i)}><span className="ritual-flame"/><img src={diyaAsset} alt=""/><small>{['For home','For family','For friends','For hope','For you'][i]}</small></button>)}</div><div className="ritual-bottom"><span>{lit.length===5?'All five are glowing. Keep that feeling.':'A little light goes a long way.'}</span><button onClick={()=>{for(let i=0;i<5;i++)if(!lit.includes(i))light(i)}}>Light them all <Flame size={14}/></button></div></div><div className="firework-invite"><div><span className="section-number">WHEN THE SKY GETS DARK</span><h2>Shall we make<br/>a little <em>noise?</em></h2><p>Turn on a few fireworks. Tap the open space to make your own bursts.</p></div><div className="firework-actions"><button className="button-plum" onClick={launch}>A little sparkle <Sparkles size={15}/></button><button className={continuous?'button-outline selected':'button-outline'} onClick={()=>setContinuous(!continuous)}>{continuous?<Pause size={14}/>:<Play size={14}/>} {continuous?'Pause the sky':'Keep them coming'}</button><button className="button-outline" onClick={()=>setSound(!sound)}>{sound?<Volume2 size={14}/>:<VolumeX size={14}/>} Sound {sound?'on':'off'}</button>{sound&&<label className="volume-control">A little softer <input aria-label="Sound volume" type="range" min="0" max="1" step=".05" value={volume} onChange={e=>setVolume(Number(e.target.value))}/></label>}</div></div></section>
 }
 
 function Wishes({to,setTo,from,setFrom,tone,setTone,makeWish,wish,copyWish,copied}:{to:string;setTo:(v:string)=>void;from:string;setFrom:(v:string)=>void;tone:string;setTone:(v:string)=>void;makeWish:()=>void;wish:string;copyWish:()=>void;copied:boolean}){
@@ -123,28 +123,55 @@ function Wishes({to,setTo,from,setFrom,tone,setTone,makeWish,wish,copyWish,copie
   const exportCard=async()=>{
     setExporting(true)
     try{
-      const canvas=document.createElement('canvas');canvas.width=1600;canvas.height=900
-      const ctx=canvas.getContext('2d');if(!ctx)throw new Error('Canvas unavailable')
-      const W=1600,H=900
-      ctx.fillStyle='#f5ecdf';ctx.fillRect(0,0,W,H)
-      ctx.strokeStyle='#c49a68';ctx.lineWidth=2;ctx.strokeRect(42,42,W-84,H-84)
-      ctx.strokeStyle='#d9bea0';ctx.lineWidth=1;ctx.strokeRect(58,58,W-116,H-116)
-      ctx.textAlign='center';ctx.fillStyle='#9d155f';ctx.font='500 24px Georgia';ctx.fillText('✳  A LITTLE NOTE FOR YOU  ✳',W/2,132)
-      ctx.fillStyle='#b77b30';ctx.font='22px Georgia';ctx.fillText('✦',W/2,184)
-      const art=new Image();art.src=diyaAsset
-      await new Promise<void>((resolve,reject)=>{art.onload=()=>resolve();art.onerror=()=>reject(new Error('Diya artwork failed to load'))})
-      ctx.drawImage(art,W/2-82,205,164,164)
-      const paragraphs=wish.split(/\r?\n\s*\r?\n/)
+      const canvas=document.createElement('canvas')
+      canvas.width=1600
+      canvas.height=900
+      const ctx=canvas.getContext('2d')
+      if(!ctx)throw new Error('Canvas unavailable')
+      const W=canvas.width,H=canvas.height
+      ctx.fillStyle='#f5ecdf'
+      ctx.fillRect(0,0,W,H)
+      ctx.strokeStyle='#c49a68'
+      ctx.lineWidth=2
+      ctx.strokeRect(42,42,W-84,H-84)
+      ctx.strokeStyle='#d9bea0'
+      ctx.lineWidth=1
+      ctx.strokeRect(58,58,W-116,H-116)
+      ctx.textAlign='center'
+      ctx.textBaseline='middle'
+      ctx.fillStyle='#9d155f'
+      ctx.font='500 25px Georgia'
+      ctx.fillText('✳  A LITTLE NOTE FOR YOU  ✳',W/2,118)
+      ctx.fillStyle='#b77b30'
+      ctx.font='24px Georgia'
+      ctx.fillText('✦',W/2,174)
+      const art=new Image()
+      art.src=diyaAsset
+      await new Promise<void>((resolve,reject)=>{
+        if(art.complete&&art.naturalWidth){resolve();return}
+        art.onload=()=>resolve()
+        art.onerror=()=>reject(new Error('Diya artwork failed to load'))
+      })
+      ctx.drawImage(art,W/2-78,202,156,156)
       const maxWidth=1260
-      let fontSize=34
-      const getLines=(size:number)=>{
-        ctx.font='italic '+size+'px Georgia'
+      const rawText=wish.replace(/\\r/g,'').split(/\\n+/).map(part=>part.trim()).filter(Boolean)
+      const wrap=(fontSize:number)=>{
+        ctx.font='italic '+fontSize+'px Georgia'
         const lines:string[]=[]
-        for(const paragraph of paragraphs){
+        for(const paragraph of rawText){
           let line=''
-          for(const word of paragraph.trim().split(/\s+/)){
-            const test=line?line+' '+word:word
-            if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=word}else line=test
+          for(const word of paragraph.split(/\\s+/)){
+            const candidate=line?line+' '+word:word
+            if(ctx.measureText(candidate).width<=maxWidth){line=candidate;continue}
+            if(line)lines.push(line)
+            line=''
+            if(ctx.measureText(word).width<=maxWidth){line=word;continue}
+            let fragment=''
+            for(const char of word){
+              if(ctx.measureText(fragment+char).width>maxWidth&&fragment){lines.push(fragment);fragment=char}
+              else fragment+=char
+            }
+            line=fragment
           }
           if(line)lines.push(line)
           lines.push('')
@@ -152,18 +179,36 @@ function Wishes({to,setTo,from,setFrom,tone,setTone,makeWish,wish,copyWish,copie
         if(lines[lines.length-1]==='')lines.pop()
         return lines
       }
-      let lines=getLines(fontSize)
-      while(lines.length*48>310&&fontSize>27){fontSize-=1;lines=getLines(fontSize)}
-      ctx.fillStyle='#33242b';ctx.font='italic '+fontSize+'px Georgia'
-      let y=455
-      for(const line of lines){if(line){ctx.fillText(line,W/2,y);y+=48}else y+=14}
-      const signY=Math.min(Math.max(y+15,650),735)
-      ctx.fillStyle='#9d155f';ctx.font='600 19px Arial';ctx.fillText('WITH LOVE, '+(from.trim()||'AKHIL').toUpperCase(),W/2,signY)
-      ctx.fillStyle='#8b7668';ctx.font='16px Arial';ctx.fillText('DIWALI 2026  ·  HYDERABAD',W/2,790)
-      ctx.fillStyle='#b77b30';ctx.font='24px Georgia';ctx.fillText('✳     ✦     ✳',W/2,825)
-      const link=document.createElement('a');link.download='diwali-greeting-'+(to.trim()||'for-you').toLowerCase().replace(/[^a-z0-9]+/g,'-')+'.png';link.href=canvas.toDataURL('image/png');link.click()
-    }catch(error){console.error(error);alert('The greeting image could not be exported. Please try again.')}
-    finally{setExporting(false)}
+      let fontSize=35
+      let lines=wrap(fontSize)
+      while(lines.length*48>238&&fontSize>22){fontSize-=1;lines=wrap(fontSize)}
+      const lineHeight=Math.min(48,fontSize*1.42)
+      const contentHeight=lines.reduce((sum,line)=>sum+(line?lineHeight:12),0)
+      let y=405+(260-contentHeight)/2
+      ctx.fillStyle='#33242b'
+      ctx.font='italic '+fontSize+'px Georgia'
+      for(const line of lines){
+        if(line){ctx.fillText(line,W/2,y);y+=lineHeight}
+        else y+=12
+      }
+      ctx.fillStyle='#9d155f'
+      ctx.font='600 20px Arial'
+      ctx.fillText('WITH LOVE, '+(from.trim()||'AKHIL').toUpperCase(),W/2,714)
+      ctx.fillStyle='#8b7668'
+      ctx.font='16px Arial'
+      ctx.fillText('DIWALI 2026  ·  HYDERABAD',W/2,782)
+      ctx.fillStyle='#b77b30'
+      ctx.font='24px Georgia'
+      ctx.fillText('✳     ✦     ✳',W/2,824)
+      const link=document.createElement('a')
+      const safeName=(to.trim()||'for-you').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')
+      link.download='diwali-greeting-'+(safeName||'for-you')+'.png'
+      link.href=canvas.toDataURL('image/png')
+      link.click()
+    }catch(error){
+      console.error('Greeting export failed',error)
+      alert('The greeting image could not be exported. Please try again.')
+    }finally{setExporting(false)}
   }
   return <section className="wishes-page page-width"><div className="page-heading"><span className="section-number">A NOTE, JUST FOR YOU</span><h1>Words from<br/><em>the heart.</em></h1><p>A greeting doesn't have to be grand. It just has to feel like it came from you.</p></div><div className="wish-maker"><form onSubmit={e=>{e.preventDefault();makeWish()}}><label htmlFor="wish-to">Who are you thinking of?</label><input id="wish-to" value={to} onChange={e=>setTo(e.target.value)} placeholder="Their name" maxLength={50}/><label htmlFor="wish-from">And it's from...</label><input id="wish-from" value={from} onChange={e=>setFrom(e.target.value)} placeholder="Your name" maxLength={50}/><label>What sort of note?</label><div className="tone-options">{[['heartfelt','Heartfelt'],['joyful','A little silly'],['simple','Simple & warm']].map(([v,l])=><button type="button" key={v} className={tone===v?'tone-active':''} onClick={()=>setTone(v)}>{l}</button>)}</div><button className="button-plum submit-wish" type="submit">Write my note <ArrowRight size={15}/></button></form><div className="wish-preview"><div className="preview-top"><span>✳ A LITTLE NOTE FOR YOU</span><Heart size={15}/></div><div className="preview-body"><img src={diyaAsset} alt=""/><p>{wish.split('\n\n').map((s,i)=><span key={i}>{s}</span>)}</p><small>WITH LOVE, {from||'AKHIL'}</small></div><div className="wish-export-actions"><button className="copy-button" onClick={copyWish}><Copy size={14}/>{copied?'Copied — go make someone smile':'Copy this little note'}{copied&&<Check size={14}/>}</button><button className="copy-button export-image-button" onClick={exportCard} disabled={exporting}><Download size={14}/>{exporting?'Preparing image…':'Export as PNG'}</button></div></div></div></section>
 }

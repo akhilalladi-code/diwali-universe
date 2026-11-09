@@ -17,6 +17,8 @@ const projects = [
 
 function useFireworks(active:boolean,canvasRef:RefObject<HTMLCanvasElement|null>,onBurst:()=>void) {
   const particles=useRef<Particle[]>([])
+  const onBurstRef=useRef(onBurst)
+  onBurstRef.current=onBurst
   const rockets=useRef<{x:number;y:number;tx:number;ty:number;speed:number;hue:number}[]>([])
   useEffect(()=>{
     const canvas=canvasRef.current
@@ -59,7 +61,6 @@ export default function App(){
   const [sound,setSound]=useState(true),[volume,setVolume]=useState(.25),[to,setTo]=useState(''),[from,setFrom]=useState('Akhil')
   const [tone,setTone]=useState('heartfelt'),[wish,setWish]=useState(''),[copied,setCopied]=useState(false),[dark,setDark]=useState(false)
   const canvasRef=useRef<HTMLCanvasElement>(null)
-  const launch=useFireworks(continuous,canvasRef)
   const audio=useRef<AudioContext|null>(null)
   useEffect(()=>{const onHash=()=>setSection((location.hash.replace('#','') as Section)||'home');window.addEventListener('hashchange',onHash);return()=>window.removeEventListener('hashchange',onHash)},[])
   useEffect(()=>{document.body.classList.toggle('night-mode',dark);return()=>document.body.classList.remove('night-mode')},[dark])
@@ -67,7 +68,8 @@ export default function App(){
   const light=(i:number)=>setLit(old=>old.includes(i)?old.filter(x=>x!==i):[...old,i])
   const playChime=()=>{if(!sound)return;try{const Ctx=window.AudioContext||((window as unknown as {webkitAudioContext?:typeof AudioContext}).webkitAudioContext);if(!Ctx)return;audio.current??=new Ctx();const c=audio.current,o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.value=660;g.gain.setValueAtTime(.0001,c.currentTime);g.gain.exponentialRampToValueAtTime(volume*.16,c.currentTime+.03);g.gain.exponentialRampToValueAtTime(.0001,c.currentTime+.7);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+.72)}catch{/* Audio is an optional enhancement. */}}
   const playFireworkSound=()=>{if(!sound)return;try{const Ctx=window.AudioContext||((window as unknown as {webkitAudioContext?:typeof AudioContext}).webkitAudioContext);if(!Ctx)return;audio.current??=new Ctx();const c=audio.current;void c.resume();const now=c.currentTime;const boom=c.createOscillator(),boomGain=c.createGain();boom.type='sine';boom.frequency.setValueAtTime(125,now);boom.frequency.exponentialRampToValueAtTime(42,now+.42);boomGain.gain.setValueAtTime(Math.max(.0001,volume*.42),now);boomGain.gain.exponentialRampToValueAtTime(.0001,now+.46);boom.connect(boomGain);boomGain.connect(c.destination);boom.start(now);boom.stop(now+.48);const length=Math.floor(c.sampleRate*.32),buffer=c.createBuffer(1,length,c.sampleRate),data=buffer.getChannelData(0);for(let i=0;i<length;i++)data[i]=(Math.random()*2-1)*(1-i/length);const noise=c.createBufferSource(),filter=c.createBiquadFilter(),crackleGain=c.createGain();noise.buffer=buffer;filter.type='bandpass';filter.frequency.value=1500;filter.Q.value=.7;crackleGain.gain.setValueAtTime(Math.max(.0001,volume*.18),now);crackleGain.gain.exponentialRampToValueAtTime(.0001,now+.3);noise.connect(filter);filter.connect(crackleGain);crackleGain.connect(c.destination);noise.start(now);noise.stop(now+.32)}catch{/* Audio is an optional enhancement. */}}
-  const launch=useFireworks(continuous,canvasRef,playFireworkSound)\n  const makeWish=()=>{const name=to.trim();const greeting=name?`, ${name}`:'';const lines=tone==='joyful'?[`Happy Diwali${greeting}!`,'Hope the house is full of laughter, the sweets disappear too quickly, and the year ahead brings lovely surprises.']:tone==='simple'?[`A beautiful Diwali${name?` to you, ${name}`:''}.`,'Wishing you peace at home, light in your heart, and good things in the days ahead.']:[`Thinking of you this Diwali${greeting}.`,'May there be warmth around your table, familiar voices at your door, and enough little moments to remember long after the lights come down.'];setWish(lines.join('\n\n'))}
+  const launch=useFireworks(continuous,canvasRef,playFireworkSound)
+  const makeWish=()=>{const name=to.trim();const greeting=name?`, ${name}`:'';const lines=tone==='joyful'?[`Happy Diwali${greeting}!`,'Hope the house is full of laughter, the sweets disappear too quickly, and the year ahead brings lovely surprises.']:tone==='simple'?[`A beautiful Diwali${name?` to you, ${name}`:''}.`,'Wishing you peace at home, light in your heart, and good things in the days ahead.']:[`Thinking of you this Diwali${greeting}.`,'May there be warmth around your table, familiar voices at your door, and enough little moments to remember long after the lights come down.'];setWish(lines.join('\n\n'))}
   const copyWish=async()=>{try{await navigator.clipboard.writeText(`${wish}\n\nWith love, ${from||'Akhil'}`);setCopied(true);setTimeout(()=>setCopied(false),1800)}catch{setCopied(false)}}
   const greeting=wish||'May there be warmth around your table, familiar voices at your door, and enough little moments to remember long after the lights come down.'
   return <div className="site-shell">

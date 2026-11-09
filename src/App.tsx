@@ -69,7 +69,6 @@ export default function App(){
   useEffect(()=>{const onHash=()=>{const candidate=location.hash.slice(1);setSection(['home','celebrate','wishes','about'].includes(candidate)?candidate as Section:'home')};window.addEventListener('hashchange',onHash);return()=>window.removeEventListener('hashchange',onHash)},[])
   useEffect(()=>{const closeMenu=(event:KeyboardEvent)=>{if(event.key==='Escape')setMenu(false)};window.addEventListener('keydown',closeMenu);return()=>window.removeEventListener('keydown',closeMenu)},[])
   useEffect(()=>{document.body.classList.toggle('night-mode',dark);return()=>document.body.classList.remove('night-mode')},[dark])
-  useEffect(()=>{mainRef.current?.focus({preventScroll:true})},[section])
   useEffect(()=>{if(reduceMotion)setContinuous(false)},[reduceMotion])
   useEffect(()=>()=>{if(audio.current)void audio.current.close()},[])
   const navigate=(s:Section)=>{setSection(s);location.hash=s==='home'?'':'#'+s;setMenu(false);window.scrollTo({top:0,behavior:reduceMotion?'auto':'smooth'})}
@@ -102,7 +101,7 @@ export default function App(){
       <div className="header-actions"><button className="icon-button" onClick={()=>setDark(!dark)} aria-label="Toggle night mode" aria-pressed={dark}>{dark?<Sun size={17}/>:<Moon size={17}/>}</button><button className="menu-button" onClick={()=>setMenu(!menu)} aria-label="Toggle menu" aria-expanded={menu}>{menu?<X/>:<Menu/>}</button><button className="header-cta" onClick={()=>navigate('celebrate')}><Flame size={13}/> Light a Virtual Diya <ArrowUpRight size={14}/></button></div>
     </header>
     <AnimatePresence mode="wait">
-      <motion.main id="main-content" ref={mainRef} tabIndex={-1} aria-label={`${section} section`} key={section} initial={reduceMotion?{opacity:1,y:0}:{opacity:0,y:12}} animate={{opacity:1,y:0}} exit={reduceMotion?{opacity:1,y:0}:{opacity:0,y:-8}} transition={reduceMotion?{duration:0}:{duration:.38,ease:[.22,.61,.36,1]}}>
+      <motion.main id="main-content" ref={mainRef} tabIndex={-1} aria-label={`${section} section`} key={section} initial={reduceMotion?{opacity:1,y:0}:{opacity:0,y:12}} animate={{opacity:1,y:0}} exit={reduceMotion?{opacity:1,y:0}:{opacity:0,y:-8}} transition={reduceMotion?{duration:0}:{duration:.38,ease:[.22,.61,.36,1]}} onAnimationComplete={()=>mainRef.current?.focus({preventScroll:true})}>
         {section==='home'&&<Home navigate={navigate}/>}
         {section==='celebrate'&&<Celebrate lit={lit} light={light} playChime={playChime} continuous={continuous} setContinuous={setContinuous} launch={launch} sound={sound} setSound={setSound} volume={volume} setVolume={setVolume} reducedMotion={Boolean(reduceMotion)}/>}
         {section==='wishes'&&<Wishes to={to} setTo={setTo} from={from} setFrom={setFrom} tone={tone} setTone={setTone} makeWish={makeWish} wish={greeting} copyWish={copyWish} copied={copied}/>}

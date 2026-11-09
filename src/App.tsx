@@ -83,7 +83,7 @@ export default function App(){
     </header>
     <AnimatePresence mode="wait">
       <motion.main key={section} initial={{opacity:0,y:12}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-8}} transition={{duration:.38,ease:[.22,.61,.36,1]}}>
-        {section==='home'&&<Home navigate={navigate} launch={launch} lit={lit} light={light}/>}
+        {section==='home'&&<Home navigate={navigate}/>}
         {section==='celebrate'&&<Celebrate lit={lit} light={light} playChime={playChime} continuous={continuous} setContinuous={setContinuous} launch={launch} sound={sound} setSound={setSound} volume={volume} setVolume={setVolume}/>}
         {section==='wishes'&&<Wishes to={to} setTo={setTo} from={from} setFrom={setFrom} tone={tone} setTone={setTone} makeWish={makeWish} wish={greeting} copyWish={copyWish} copied={copied}/>}
         {section==='about'&&<About/>}
@@ -93,7 +93,7 @@ export default function App(){
   </div>
 }
 
-function Home({navigate,launch,lit,light}:{navigate:(s:Section)=>void;launch:()=>void;lit:number[];light:(i:number)=>void}){
+function Home({navigate}:{navigate:(s:Section)=>void}){
   const ideas=[
     {title:'Light One for Someone',copy:'Send a virtual diya and share a little positivity.',image:'https://images.pexels.com/photos/1693095/pexels-photo-1693095.jpeg?auto=compress&cs=tinysrgb&w=420',alt:'Golden festive lights glowing in the night',go:()=>navigate('celebrate')},
     {title:'Send a Note, Not a Template',copy:'Write a heartfelt wish with our beautiful card editor.',image:'https://images.pexels.com/photos/1303081/pexels-photo-1303081.jpeg?auto=compress&cs=tinysrgb&w=420',alt:'A beautifully wrapped festive gift',go:()=>navigate('wishes')},

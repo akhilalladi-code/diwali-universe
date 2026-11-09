@@ -1,6 +1,6 @@
 # Diwali, at Home — Akhil Alladi
 
-A personal Diwali experience built with React, TypeScript, Vite, Framer Motion and Canvas.
+A personal Diwali experience built with React, TypeScript, Vite, Framer Motion, Three.js and Canvas.
 
 **Live site:** https://akhilalladi-code.github.io/diwali-universe/
 
@@ -23,7 +23,7 @@ npm run preview
 - React 19 + TypeScript
 - Vite
 - Framer Motion for restrained page transitions
-- Canvas for optional interactive fireworks
+- Three.js for the responsive, pointer-reactive 3D diya sculpture\n- Canvas for optional interactive fireworks
 - CSS for the handcrafted visual system and responsive layouts
 
 ## Design notes

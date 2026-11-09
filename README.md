@@ -26,7 +26,7 @@ Then visit `http://localhost:8000`.
 
 ## Deployment
 
-GitHub Actions publishes the repository root to GitHub Pages when changes are pushed to `main`. In **Settings → Pages**, select **GitHub Actions** as the source.
+GitHub Actions publishes the repository root to GitHub Pages when changes are pushed to `main`. In **Settings → Pages**, select **GitHub Actions** as the source. The first deployment run can fail while Pages is still disabled for this repository; enable Pages with GitHub Actions and push a new commit (or run the workflow manually).
 
 ## Accessibility and privacy
 

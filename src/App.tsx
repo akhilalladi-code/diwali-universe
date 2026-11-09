@@ -35,7 +35,7 @@ function useFireworks(active:boolean,canvasRef:RefObject<HTMLCanvasElement|null>
       raf=requestAnimationFrame(loop)
     }
     loop()
-    const click=(e:PointerEvent)=>{if(!active)return;if((e.target as HTMLElement)?.closest('button,a,input,select,textarea'))return;burst(e.clientX,e.clientY,[38,330,160,22][Math.floor(Math.random()*4)])}
+    const click=(e:PointerEvent)=>{if(!active&&!document.querySelector('.celebrate-page'))return;if((e.target as HTMLElement)?.closest('button,a,input,select,textarea'))return;burst(e.clientX,e.clientY,[38,330,160,22][Math.floor(Math.random()*4)])}
     window.addEventListener('pointerdown',click)
     return()=>{cancelAnimationFrame(raf);window.removeEventListener('resize',resize);window.removeEventListener('pointerdown',click)}
   },[active,canvasRef])

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import type { RefObject } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { ArrowDown, ArrowRight, ArrowUpRight, Check, Copy, Flame, Github, Heart, Menu, Moon, Pause, Play, Send, Sparkles, Sun, Volume2, VolumeX, X } from 'lucide-react'
 
@@ -12,7 +13,7 @@ const lights = [
 ]
 type Burst = { x:number; y:number; vx:number; vy:number; life:number; max:number; hue:number; size:number }
 
-function useFireworks(canvasRef: React.RefObject<HTMLCanvasElement | null>, active: boolean) {
+function useFireworks(canvasRef: RefObject<HTMLCanvasElement | null>, active: boolean) {
   const particles = useRef<Burst[]>([])
   const addBurst = (x:number,y:number) => {
     const hue = [38, 330, 156, 18][Math.floor(Math.random()*4)]
@@ -136,12 +137,8 @@ function App(){
         <div className="arrival-grain"/>
         <div className="arrival-inner">
           <div className="arrival-copy">
-            <p className="scene-kicker"><span/> A LITTLE FESTIVE CORNER OF THE INTERNET</p>
-            <p className="arrival-meta">DIWALI 2026 <b>✳</b> HYDERABAD, INDIA</p>
             <h1><span>Some nights</span><span>are made for</span><em>light.</em></h1>
-            <p className="arrival-description">A little glow for the people, places and moments that make a house feel like home.</p>
             <div className="arrival-actions"><a className="btn-primary" href="#lights">Light a diya <ArrowRight size={17}/></a><a className="btn-quiet" href="#celebration">Make a little sparkle <Sparkles size={16}/></a></div>
-            <p className="maker-signature">A small Diwali project, made by Akhil <span>↗</span></p>
           </div>
           <div className="arrival-art" aria-label="Illustrated Diwali diya">
             <div className="art-halo"/><Rangoli className="arrival-rangoli"/>
@@ -153,7 +150,7 @@ function App(){
             <span className="art-star art-star-a">✳</span><span className="art-star art-star-b">✦</span>
           </div>
         </div>
-        <a className="scroll-cue" href="#lights"><span>SCROLL A LITTLE</span><ArrowDown size={15}/><i>No rush. Stay for a moment.</i></a>
+
       </section>
 
       <section className="scene scene-lights" id="lights" ref={productRef}>

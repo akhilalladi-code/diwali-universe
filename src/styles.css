@@ -20,3 +20,236 @@
 }
 
 .wish-export-actions{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #9b774d30}.wish-export-actions .copy-button{border-top:0;min-width:0}.wish-export-actions .export-image-button{border-left:1px solid #9b774d30;background:#9d155f08;font-weight:600}.wish-export-actions button:disabled{opacity:.55;cursor:wait}@media(max-width:520px){.wish-export-actions{grid-template-columns:1fr}.wish-export-actions .export-image-button{border-left:0;border-top:1px solid #9b774d30}}
+
+
+/* UNSLOP design system — The modern Diwali keepsake */
+:root{
+  --paper:#f5eee3;
+  --paper2:#ece1d1;
+  --ink:#30232b;
+  --muted:#76675f;
+  --plum:#94134f;
+  --plum-dark:#68103b;
+  --gold:#b77b30;
+  --green:#176c5b;
+  --line:rgba(82,57,43,.18);
+  --serif:'Playfair Display',Georgia,serif;
+  --space-1:4px;
+  --space-2:8px;
+  --space-3:12px;
+  --space-4:16px;
+  --space-6:24px;
+  --space-8:32px;
+  --space-12:48px;
+  --space-16:64px;
+  --space-20:80px;
+}
+html{scroll-behavior:smooth}
+body{overflow-x:hidden}
+button,a,input{ -webkit-tap-highlight-color:transparent }
+button:focus-visible,a:focus-visible,input:focus-visible{
+  outline:2px solid var(--gold);
+  outline-offset:4px;
+}
+.site-header{
+  background:rgba(245,238,227,.96);
+  backdrop-filter:none;
+  border-bottom-color:var(--line);
+}
+.main-nav{gap:clamp(16px,2.2vw,30px)}
+.main-nav button{font-size:12px;min-height:42px}
+.main-nav button.nav-active{border-bottom-width:2px}
+.header-cta{border-radius:0;box-shadow:none}
+.icon-button,.menu-button{border-radius:2px}
+.page-width{width:min(1160px,calc(100% - 64px))}
+.hero-grid{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(20px,4vw,64px)}
+.hero-copy h1,.page-heading h1{letter-spacing:-.045em}
+.hero-art-wrap{height:510px}
+.paper-circle{
+  width:min(440px,88%);
+  background:radial-gradient(circle,#f0dfc3 0 58%,#ead8bb 58% 100%);
+  box-shadow:none;
+}
+.paper-circle:after{inset:12px;border-style:solid;border-color:rgba(167,122,66,.34)}
+.hero-sticker{box-shadow:none;border-radius:50%}
+.hero-lights-panel,.home-lights-panel{
+  background:var(--paper2);
+  border:1px solid var(--line);
+  border-radius:0;
+  box-shadow:none;
+}
+.home-lights-panel{padding:22px 28px 16px}
+.home-diya-row{padding-block:28px 24px}
+.home-diya{border-right-color:var(--line)}
+.home-diya:hover{transform:translateY(-2px)}
+.little-things{padding-block:104px 112px}
+.memory-list article{gap:20px;padding-block:25px}
+.memory-list article button{border-radius:2px}
+.projects-section{
+  background:#e9dfd0;
+  border-block:1px solid var(--line);
+  padding-block:88px 96px;
+}
+.projects-inner{grid-template-columns:minmax(240px,.72fr) minmax(0,1.28fr);gap:clamp(32px,6vw,84px)}
+.project-cards{gap:0;border-top:1px solid rgba(67,44,39,.22)}
+.project-card,
+.project-card.plum,.project-card.leaf,.project-card.saffron,.project-card.rose{
+  min-height:126px;
+  padding:22px 56px 22px 52px;
+  background:transparent;
+  color:var(--ink);
+  border-bottom:1px solid rgba(67,44,39,.22);
+  transition:background .2s ease,padding .2s ease;
+}
+.project-card:hover{
+  transform:none;
+  padding-left:58px;
+  background:rgba(255,255,255,.22);
+}
+.project-count{top:27px;left:8px;color:var(--gold);opacity:1}
+.project-symbol{top:25px;right:18px;font-size:30px;color:var(--green);opacity:.8}
+.project-card strong{font-size:20px;margin-bottom:6px}
+.project-card small{font-size:11px;color:var(--muted);opacity:1}
+.project-arrow{right:12px;bottom:27px;color:var(--plum)}
+.closing-note{padding-block:96px 104px}
+.button-plum{
+  border-radius:0;
+  box-shadow:2px 2px 0 rgba(120,82,48,.22);
+  min-height:46px;
+  justify-content:center;
+  font-weight:600;
+}
+.button-plum:hover{box-shadow:3px 3px 0 rgba(120,82,48,.28)}
+.button-text{min-height:44px}
+.button-outline,.ritual-bottom button,.lights-panel-foot button{
+  border-radius:0;
+  min-height:42px;
+}
+.diya-ritual{
+  background:var(--paper2);
+  border:1px solid var(--line);
+  border-radius:0;
+}
+.ritual-row,.diya-row{gap:clamp(8px,2vw,22px)}
+.ritual-diya{min-height:150px;justify-content:flex-end;padding:12px 8px}
+.ritual-diya img{max-width:126px}
+.firework-invite{border-top:1px solid var(--line);margin-top:42px;padding-top:64px}
+.firework-actions{min-width:min(320px,100%)}
+.firework-actions .button-plum,.firework-actions .button-outline{width:100%;justify-content:center}
+.wish-maker{grid-template-columns:minmax(240px,.72fr) minmax(0,1.28fr);gap:clamp(32px,6vw,84px)}
+.wish-maker form{max-width:390px}
+.wish-maker input{min-height:46px;border-radius:0}
+.tone-options button{border-radius:0;min-height:40px}
+.wish-preview{
+  background:#fff9ef;
+  border:1px solid rgba(130,91,56,.34);
+  border-radius:0;
+  box-shadow:4px 4px 0 #e2d2bd;
+}
+.preview-body{padding:clamp(24px,4vw,48px)}
+.preview-body p{max-width:36ch;overflow-wrap:anywhere}
+.copy-button{min-height:48px}
+.about-paper{
+  background:var(--paper2);
+  border:1px solid var(--line);
+  box-shadow:4px 4px 0 rgba(91,63,42,.12);
+  transform:none;
+}
+.site-footer{border-top-color:var(--line)}
+.firework-canvas{mix-blend-mode:multiply}
+.night-mode{
+  --paper:#211a20;
+  --paper2:#30252d;
+  --ink:#f3e8d9;
+  --muted:#c7b7aa;
+  --line:rgba(243,232,217,.18);
+  background:var(--paper);
+  color:var(--ink);
+}
+.night-mode .site-header{background:rgba(33,26,32,.97);border-bottom-color:var(--line)}
+.night-mode .main-nav button,.night-mode .wordmark,.night-mode .icon-button,.night-mode .button-text{color:var(--ink)}
+.night-mode .home-lights-panel,.night-mode .diya-ritual,.night-mode .about-paper,.night-mode .projects-section{background:var(--paper2);border-color:var(--line)}
+.night-mode .project-card,.night-mode .project-card.plum,.night-mode .project-card.leaf,.night-mode .project-card.saffron,.night-mode .project-card.rose{
+  color:var(--ink);border-bottom-color:var(--line)
+}
+.night-mode .project-card:hover{background:rgba(255,255,255,.04)}
+.night-mode .project-card small,.night-mode .home-diya-label,.night-mode .memory-list p{color:var(--muted)}
+.night-mode .project-symbol{color:#d6a65d}
+.night-mode .wish-preview{background:#342830;border-color:var(--line);box-shadow:4px 4px 0 rgba(0,0,0,.18)}
+.night-mode .preview-body p,.night-mode .about-paper p{color:var(--ink)}
+.night-mode .preview-top,.night-mode .copy-button{border-color:var(--line)}
+.night-mode .hero-intro,.night-mode .section-intro>p,.night-mode .page-heading>p,.night-mode .firework-invite p{color:var(--muted)}
+.night-mode .home-lights-panel{background:#30252d}
+.night-mode .paper-circle{background:radial-gradient(circle,#3a2d31 0 58%,#30252d 58% 100%)}
+.night-mode .button-outline{color:#f1c78c;border-color:rgba(241,199,140,.5)}
+.night-mode .button-outline.selected{background:var(--green);color:white}
+.night-mode .firework-canvas{mix-blend-mode:screen;filter:brightness(1.45) saturate(1.25)}
+@media(max-width:900px){
+  .page-width{width:min(100% - 48px,720px)}
+  .hero-grid{grid-template-columns:1fr;gap:0;min-height:0}
+  .hero-art-wrap{height:400px;grid-row:1}
+  .hero-copy{padding:20px 0 34px}
+  .projects-inner,.wish-maker{grid-template-columns:1fr;gap:32px}
+  .projects-inner .section-intro>p{max-width:480px}
+  .wish-maker form{max-width:none}
+}
+@media(max-width:640px){
+  .page-width{width:calc(100% - 36px)}
+  .site-header{height:68px;padding-inline:18px}
+  .wordmark{font-size:15px}
+  .wordmark img{width:36px;height:36px}
+  .header-actions{gap:8px}
+  .icon-button,.menu-button{width:38px;height:38px}
+  .main-nav{top:67px;padding:18px}
+  .hero-art-wrap{height:320px}
+  .hero-copy h1,.page-heading h1{font-size:clamp(48px,13vw,62px);letter-spacing:-.05em}
+  .hero-copy{padding-top:12px}
+  .handwritten{max-width:100%;width:auto;transform:none}
+  .home-lights-panel{padding:18px 14px 14px}
+  .home-diya-row{grid-template-columns:repeat(5,minmax(0,1fr));padding-block:20px 16px}
+  .home-diya{padding-inline:3px}
+  .home-diya-icon,.home-diya-icon svg{width:46px;height:44px}
+  .home-diya-label{font-size:12px;text-align:center}
+  .home-diya-state{font-size:6px;letter-spacing:.7px}
+  .lights-panel-head{font-size:8px;letter-spacing:1px}
+  .little-things{grid-template-columns:1fr;padding-block:68px;gap:28px}
+  .projects-section{padding-block:64px}
+  .project-card,.project-card.plum,.project-card.leaf,.project-card.saffron,.project-card.rose{min-height:112px;padding:18px 44px 18px 42px}
+  .project-card strong{font-size:17px}
+  .project-symbol{font-size:25px;right:10px}
+  .project-arrow{right:6px}
+  .closing-note{padding-block:72px}
+  .page-heading{padding:54px 0 32px}
+  .diya-ritual{padding:18px 14px}
+  .diya-row{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 8px;padding:28px 0 22px}
+  .ritual-diya:last-child{grid-column:1/-1}
+  .ritual-diya img{width:112px}
+  .ritual-top,.ritual-bottom{gap:12px;font-size:8px}
+  .ritual-bottom{align-items:flex-start}
+  .ritual-bottom button{white-space:nowrap}
+  .firework-invite{padding-block:54px 72px;gap:20px}
+  .firework-invite h2{font-size:36px}
+  .firework-actions{width:100%;min-width:0}
+  .wish-maker{padding-bottom:72px}
+  .wish-preview{min-height:330px}
+  .preview-body{padding:24px 18px}
+  .preview-body p{font-size:18px}
+  .wish-export-actions{grid-template-columns:1fr}
+  .wish-export-actions .export-image-button{border-left:0;border-top:1px solid var(--line)}
+  .about-paper{padding:32px 24px}
+  .about-paper p{font-size:17px}
+  .site-footer{padding:20px 18px;gap:12px;font-size:10px}
+}
+@media(max-width:390px){
+  .page-width{width:calc(100% - 28px)}
+  .home-diya-icon,.home-diya-icon svg{width:40px;height:40px}
+  .home-diya-label{font-size:11px}
+  .lights-panel-foot{align-items:flex-start;gap:10px}
+  .lights-panel-foot button{padding:8px}
+  .project-cards{grid-template-columns:1fr}
+  .ritual-top{letter-spacing:.7px}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}

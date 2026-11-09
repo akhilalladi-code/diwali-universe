@@ -643,3 +643,48 @@ button:focus-visible,a:focus-visible,input:focus-visible{border-radius:4px}
   html{scroll-behavior:auto!important}
   .reference-idea img,.reference-project-card,.button-plum,.hero-photo{transition:none!important}
 }
+
+/* Audit remediation: keyboard access, theme parity and mobile readability */
+.skip-link{
+  position:fixed;left:16px;top:12px;z-index:1000;
+  padding:11px 16px;background:#fff8ed;color:#68103f;
+  border:2px solid #94134f;border-radius:6px;
+  transform:translateY(-160%);transition:transform .18s ease;
+}
+.skip-link:focus{transform:translateY(0)}
+#main-content:focus{outline:none}
+.night-mode .main-nav{
+  background:#211a20;border-color:var(--line);color:var(--ink);
+}
+.night-mode .main-nav button{color:var(--ink)}
+.night-mode .main-nav button:hover,
+.night-mode .main-nav button.nav-active{color:#f0b5c9}
+.night-mode .ritual-bottom,
+.night-mode .ritual-top,
+.night-mode .volume-control{color:var(--muted)}
+.night-mode .ritual-bottom button,
+.night-mode .button-outline{color:#f0b5c9;border-color:#c59aaf80}
+.night-mode .tone-options button{color:var(--ink);border-color:var(--line)}
+.night-mode .tone-options button.tone-active{background:#176c5b;color:#fff;border-color:#176c5b}
+.night-mode .wish-maker label{color:var(--muted)}
+.night-mode .wish-maker input{color:var(--ink);border-color:var(--line)}
+.night-mode .site-footer a{color:#f0b5c9}
+.ritual-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ritual-controls button:disabled{opacity:.45;cursor:not-allowed}
+.motion-note{margin:0;color:var(--muted);font-size:12px;line-height:1.6}
+.tone-options button:focus-visible{outline-offset:3px}
+.reference-shortcut small,.reference-idea-copy small,.reference-project-card small{font-size:max(10px,.95vw)}
+@media(max-width:600px){
+  .night-mode .main-nav{background:#211a20;box-shadow:0 10px 20px #0005}
+  .ritual-bottom{align-items:flex-start;flex-wrap:wrap}
+  .ritual-controls{width:100%}
+  .ritual-controls button{flex:1;justify-content:center}
+  .reference-shortcut small,.reference-idea-copy small,.reference-project-card small{font-size:10px}
+  .reference-hero-photo{
+    background-image:url('https://images.pexels.com/photos/4078516/pexels-photo-4078516.jpeg?auto=compress&cs=tinysrgb&w=1000');
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .skip-link{transition:none}
+  .firework-canvas{display:none}
+}

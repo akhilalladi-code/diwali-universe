@@ -15,7 +15,7 @@ const projects = [
   {name:'Claude Code at ₹0',kind:'Notes from learning by making',url:'https://akhilalladi-code.github.io/claude-code-at-zero-cost/',mark:'⌘',tone:'rose'},
 ]
 
-function useFireworks(active:boolean,canvasRef:RefObject<HTMLCanvasElement|null>) {
+function useFireworks(active:boolean,canvasRef:RefObject<HTMLCanvasElement|null>,onBurst:()=>void) {
   const particles=useRef<Particle[]>([])
   const rockets=useRef<{x:number;y:number;tx:number;ty:number;speed:number;hue:number}[]>([])
   useEffect(()=>{
@@ -31,13 +31,13 @@ function useFireworks(active:boolean,canvasRef:RefObject<HTMLCanvasElement|null>
       frame++
       ctx.clearRect(0,0,innerWidth,innerHeight)
       if(active&&frame%18===0)rockets.current.push({x:innerWidth*(.16+Math.random()*.68),y:innerHeight+10,tx:innerWidth*(.15+Math.random()*.7),ty:innerHeight*(.12+Math.random()*.48),speed:7+Math.random()*3,hue:[35,330,155,18][Math.floor(Math.random()*4)]})
-      rockets.current=rockets.current.filter(r=>{const dx=r.tx-r.x,dy=r.ty-r.y,d=Math.hypot(dx,dy);if(d<r.speed+4){burst(r.x,r.y,r.hue);return false}r.x+=dx/d*r.speed;r.y+=dy/d*r.speed;ctx.beginPath();ctx.arc(r.x,r.y,2,0,Math.PI*2);ctx.fillStyle='hsl('+r.hue+' 90% 72%)';ctx.fill();return true})
+      rockets.current=rockets.current.filter(r=>{const dx=r.tx-r.x,dy=r.ty-r.y,d=Math.hypot(dx,dy);if(d<r.speed+4){burst(r.x,r.y,r.hue);onBurstRef.current();return false}r.x+=dx/d*r.speed;r.y+=dy/d*r.speed;ctx.beginPath();ctx.arc(r.x,r.y,2,0,Math.PI*2);ctx.fillStyle='hsl('+r.hue+' 90% 72%)';ctx.fill();return true})
       particles.current=particles.current.filter(p=>p.life>0)
       for(const p of particles.current){p.trail.push({x:p.x,y:p.y});if(p.trail.length>4)p.trail.shift();p.x+=p.vx;p.y+=p.vy;p.vy+=.045;p.vx*=.985;p.life--;ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fillStyle='hsla('+p.hue+' 92% 70% / '+Math.max(0,p.life/p.max)+')';ctx.fill()}
       raf=requestAnimationFrame(loop)
     }
     loop()
-    const click=(e:PointerEvent)=>{if(!active&&!document.querySelector('.celebrate-page'))return;if((e.target as HTMLElement)?.closest('button,a,input,select,textarea'))return;burst(e.clientX,e.clientY,[38,330,160,22][Math.floor(Math.random()*4)])}
+    const click=(e:PointerEvent)=>{if(!active&&!document.querySelector('.celebrate-page'))return;if((e.target as HTMLElement)?.closest('button,a,input,select,textarea'))return;burst(e.clientX,e.clientY,[38,330,160,22][Math.floor(Math.random()*4)]);onBurstRef.current()}
     window.addEventListener('pointerdown',click)
     return()=>{cancelAnimationFrame(raf);window.removeEventListener('resize',resize);window.removeEventListener('pointerdown',click)}
   },[active,canvasRef])
@@ -67,7 +67,7 @@ export default function App(){
   const light=(i:number)=>setLit(old=>old.includes(i)?old.filter(x=>x!==i):[...old,i])
   const playChime=()=>{if(!sound)return;try{const Ctx=window.AudioContext||((window as unknown as {webkitAudioContext?:typeof AudioContext}).webkitAudioContext);if(!Ctx)return;audio.current??=new Ctx();const c=audio.current,o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.value=660;g.gain.setValueAtTime(.0001,c.currentTime);g.gain.exponentialRampToValueAtTime(volume*.16,c.currentTime+.03);g.gain.exponentialRampToValueAtTime(.0001,c.currentTime+.7);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+.72)}catch{/* Audio is an optional enhancement. */}}
   const playFireworkSound=()=>{if(!sound)return;try{const Ctx=window.AudioContext||((window as unknown as {webkitAudioContext?:typeof AudioContext}).webkitAudioContext);if(!Ctx)return;audio.current??=new Ctx();const c=audio.current;void c.resume();const now=c.currentTime;const boom=c.createOscillator(),boomGain=c.createGain();boom.type='sine';boom.frequency.setValueAtTime(125,now);boom.frequency.exponentialRampToValueAtTime(42,now+.42);boomGain.gain.setValueAtTime(Math.max(.0001,volume*.42),now);boomGain.gain.exponentialRampToValueAtTime(.0001,now+.46);boom.connect(boomGain);boomGain.connect(c.destination);boom.start(now);boom.stop(now+.48);const length=Math.floor(c.sampleRate*.32),buffer=c.createBuffer(1,length,c.sampleRate),data=buffer.getChannelData(0);for(let i=0;i<length;i++)data[i]=(Math.random()*2-1)*(1-i/length);const noise=c.createBufferSource(),filter=c.createBiquadFilter(),crackleGain=c.createGain();noise.buffer=buffer;filter.type='bandpass';filter.frequency.value=1500;filter.Q.value=.7;crackleGain.gain.setValueAtTime(Math.max(.0001,volume*.18),now);crackleGain.gain.exponentialRampToValueAtTime(.0001,now+.3);noise.connect(filter);filter.connect(crackleGain);crackleGain.connect(c.destination);noise.start(now);noise.stop(now+.32)}catch{/* Audio is an optional enhancement. */}}
-  const makeWish=()=>{const name=to.trim();const greeting=name?`, ${name}`:'';const lines=tone==='joyful'?[`Happy Diwali${greeting}!`,'Hope the house is full of laughter, the sweets disappear too quickly, and the year ahead brings lovely surprises.']:tone==='simple'?[`A beautiful Diwali${name?` to you, ${name}`:''}.`,'Wishing you peace at home, light in your heart, and good things in the days ahead.']:[`Thinking of you this Diwali${greeting}.`,'May there be warmth around your table, familiar voices at your door, and enough little moments to remember long after the lights come down.'];setWish(lines.join('\n\n'))}
+  const launch=useFireworks(continuous,canvasRef,playFireworkSound)\n  const makeWish=()=>{const name=to.trim();const greeting=name?`, ${name}`:'';const lines=tone==='joyful'?[`Happy Diwali${greeting}!`,'Hope the house is full of laughter, the sweets disappear too quickly, and the year ahead brings lovely surprises.']:tone==='simple'?[`A beautiful Diwali${name?` to you, ${name}`:''}.`,'Wishing you peace at home, light in your heart, and good things in the days ahead.']:[`Thinking of you this Diwali${greeting}.`,'May there be warmth around your table, familiar voices at your door, and enough little moments to remember long after the lights come down.'];setWish(lines.join('\n\n'))}
   const copyWish=async()=>{try{await navigator.clipboard.writeText(`${wish}\n\nWith love, ${from||'Akhil'}`);setCopied(true);setTimeout(()=>setCopied(false),1800)}catch{setCopied(false)}}
   const greeting=wish||'May there be warmth around your table, familiar voices at your door, and enough little moments to remember long after the lights come down.'
   return <div className="site-shell">

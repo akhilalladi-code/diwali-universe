@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { RefObject } from 'react'
+import DiwaliScene from './components/DiwaliScene'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowDown, ArrowRight, ArrowUpRight, Check, Copy, Flame, Github, Heart, Menu, Moon, Pause, Play, Send, Sparkles, Sun, Volume2, VolumeX, X } from 'lucide-react'
 
@@ -94,7 +95,7 @@ function Home({navigate,launch}:{navigate:(s:Section)=>void;launch:()=>void}){
       <div className="hero-note"><span className="hand-line"/> A LITTLE FESTIVE CORNER OF THE INTERNET</div>
       <div className="hero-grid">
         <div className="hero-copy"><p className="small-kicker">NOVEMBER 2026 <span>✳</span> HYDERABAD, INDIA</p><h1>Some nights<br/>are made for <em>light.</em></h1><p className="hero-intro">The house smells of sweets. Someone's fixing the rangoli. There's always one more diya to light. I wanted to keep a little of that feeling here.</p><div className="hero-buttons"><button className="button-plum" onClick={()=>navigate('celebrate')}>Light a diya <ArrowRight size={16}/></button><button className="button-text" onClick={launch}>Make a little sparkle <Sparkles size={15}/></button></div><div className="handwritten">A small Diwali project, made by Akhil <span>↗</span></div></div>
-        <div className="hero-art-wrap"><div className="paper-circle"></div><div className="hero-sticker">शुभ<br/>दीपावली</div><img className="main-diya" src="./assets/diya-art.svg" alt="A colourful illustrated diya in magenta, emerald and gold"/><div className="art-caption"><span>01 / 05</span><span>LIGHT, IN ITS OWN WAY</span></div><div className="tiny-star star-one">✳</div><div className="tiny-star star-two">✦</div></div>
+        <div className="hero-art-wrap"><div className="paper-circle"></div><div className="hero-sticker">शुभ<br/>दीपावली</div><DiwaliScene/><div className="art-caption"><span>01 / 05</span><span>LIGHT, IN ITS OWN WAY</span></div><div className="tiny-star star-one">✳</div><div className="tiny-star star-two">✦</div></div>
       </div>
       <div className="hero-bottom"><span>SCROLL A LITTLE</span><ArrowDown size={14}/><span className="bottom-note">No rush. Stay for a moment.</span></div>
     </section>

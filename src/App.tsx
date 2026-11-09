@@ -154,13 +154,13 @@ function Wishes({to,setTo,from,setFrom,tone,setTone,makeWish,wish,copyWish,copie
       })
       ctx.drawImage(art,W/2-78,202,156,156)
       const maxWidth=1260
-      const rawText=wish.replace(/\\r/g,'').split(/\\n+/).map(part=>part.trim()).filter(Boolean)
+      const rawText=wish.split(String.fromCharCode(13)).join('').split(String.fromCharCode(10)).map(part=>part.trim()).filter(Boolean)
       const wrap=(fontSize:number)=>{
         ctx.font='italic '+fontSize+'px Georgia'
         const lines:string[]=[]
         for(const paragraph of rawText){
           let line=''
-          for(const word of paragraph.split(/\\s+/)){
+          for(const word of paragraph.split(' ').filter(Boolean)){
             const candidate=line?line+' '+word:word
             if(ctx.measureText(candidate).width<=maxWidth){line=candidate;continue}
             if(line)lines.push(line)

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { RefObject } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { ArrowRight, ArrowUpRight, CalendarDays, Check, Copy, Download, Flame, Gift, Github, Heart, Menu, Moon, Pause, Play, Send, Sparkles, Sun, Users, Volume2, VolumeX, X } from 'lucide-react'
 
 type Section = 'home' | 'celebrate' | 'wishes' | 'about'
@@ -58,6 +58,7 @@ function Rangoli({small=false}:{small?:boolean}) {
 }
 
 export default function App(){
+  const reduceMotion=useReducedMotion()
   const [section,setSection]=useState<Section>(()=>{const candidate=location.hash.slice(1);return ['home','celebrate','wishes','about'].includes(candidate)?candidate as Section:'home'})
   const [menu,setMenu]=useState(false),[lit,setLit]=useState<number[]>([0]),[continuous,setContinuous]=useState(false)
   const [sound,setSound]=useState(true),[volume,setVolume]=useState(.25),[to,setTo]=useState(''),[from,setFrom]=useState('Akhil')
@@ -65,6 +66,7 @@ export default function App(){
   const canvasRef=useRef<HTMLCanvasElement>(null)
   const audio=useRef<AudioContext|null>(null)
   useEffect(()=>{const onHash=()=>{const candidate=location.hash.slice(1);setSection(['home','celebrate','wishes','about'].includes(candidate)?candidate as Section:'home')};window.addEventListener('hashchange',onHash);return()=>window.removeEventListener('hashchange',onHash)},[])
+  useEffect(()=>{const closeMenu=(event:KeyboardEvent)=>{if(event.key==='Escape')setMenu(false)};window.addEventListener('keydown',closeMenu);return()=>window.removeEventListener('keydown',closeMenu)},[])
   useEffect(()=>{document.body.classList.toggle('night-mode',dark);return()=>document.body.classList.remove('night-mode')},[dark])
   const navigate=(s:Section)=>{setSection(s);location.hash=s==='home'?'':'#'+s;setMenu(false);window.scrollTo({top:0,behavior:'smooth'})}
   const light=(i:number)=>setLit(old=>old.includes(i)?old.filter(x=>x!==i):[...old,i])
@@ -92,10 +94,10 @@ export default function App(){
       <nav className={menu?'main-nav open':'main-nav'} aria-label="Main navigation">
         {([{id:'home',label:'Home'},{id:'celebrate',label:'Little Lights'},{id:'wishes',label:'Create & Share'},{id:'about',label:'Our Story'}] as {id:Section;label:string}[]).map(item=><button key={item.label} className={section===item.id?'nav-active':''} onClick={()=>navigate(item.id)}>{item.label}</button>)}
       </nav>
-      <div className="header-actions"><button className="icon-button" onClick={()=>setDark(!dark)} aria-label="Toggle night mode">{dark?<Sun size={17}/>:<Moon size={17}/>}</button><button className="menu-button" onClick={()=>setMenu(!menu)} aria-label="Toggle menu">{menu?<X/>:<Menu/>}</button><button className="header-cta" onClick={()=>navigate('celebrate')}><Flame size={13}/> Light a Virtual Diya <ArrowUpRight size={14}/></button></div>
+      <div className="header-actions"><button className="icon-button" onClick={()=>setDark(!dark)} aria-label="Toggle night mode" aria-pressed={dark}>{dark?<Sun size={17}/>:<Moon size={17}/>}</button><button className="menu-button" onClick={()=>setMenu(!menu)} aria-label="Toggle menu" aria-expanded={menu}>{menu?<X/>:<Menu/>}</button><button className="header-cta" onClick={()=>navigate('celebrate')}><Flame size={13}/> Light a Virtual Diya <ArrowUpRight size={14}/></button></div>
     </header>
     <AnimatePresence mode="wait">
-      <motion.main key={section} initial={{opacity:0,y:12}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-8}} transition={{duration:.38,ease:[.22,.61,.36,1]}}>
+      <motion.main key={section} initial={reduceMotion?{opacity:1,y:0}:{opacity:0,y:12}} animate={{opacity:1,y:0}} exit={reduceMotion?{opacity:1,y:0}:{opacity:0,y:-8}} transition={reduceMotion?{duration:0}:{duration:.38,ease:[.22,.61,.36,1]}}>
         {section==='home'&&<Home navigate={navigate}/>}
         {section==='celebrate'&&<Celebrate lit={lit} light={light} playChime={playChime} continuous={continuous} setContinuous={setContinuous} launch={launch} sound={sound} setSound={setSound} volume={volume} setVolume={setVolume}/>}
         {section==='wishes'&&<Wishes to={to} setTo={setTo} from={from} setFrom={setFrom} tone={tone} setTone={setTone} makeWish={makeWish} wish={greeting} copyWish={copyWish} copied={copied}/>}

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import type { RefObject } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowRight, ArrowUpRight, Check, Copy, Download, Flame, Github, Heart, Menu, Moon, Pause, Play, Send, Sparkles, Sun, Volume2, VolumeX, X } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, CalendarDays, Check, Copy, Download, Flame, Gift, Github, Heart, Menu, Moon, Pause, Play, Send, Sparkles, Sun, Users, Volume2, VolumeX, X } from 'lucide-react'
 
 type Section = 'home' | 'celebrate' | 'wishes' | 'about'
 
@@ -95,16 +95,16 @@ export default function App(){
 
 function Home({navigate}:{navigate:(s:Section)=>void}){
   const ideas=[
-    {title:'Light One for Someone',copy:'Send a virtual diya and share a little positivity.',image:'https://images.pexels.com/photos/1693095/pexels-photo-1693095.jpeg?auto=compress&cs=tinysrgb&w=420',alt:'Golden festive lights glowing in the night',go:()=>navigate('celebrate')},
-    {title:'Send a Note, Not a Template',copy:'Write a heartfelt wish with our beautiful card editor.',image:'https://images.pexels.com/photos/1303081/pexels-photo-1303081.jpeg?auto=compress&cs=tinysrgb&w=420',alt:'A beautifully wrapped festive gift',go:()=>navigate('wishes')},
-    {title:'Leave a Little Light On',copy:'Explore simple ideas to make this Diwali more meaningful.',image:'https://images.pexels.com/photos/605588/pexels-photo-605588.jpeg?auto=compress&cs=tinysrgb&w=420',alt:'Colourful traditional rangoli decoration',go:()=>navigate('celebrate')}
+    {title:'Light One for Someone',copy:'Send a virtual diya and share a little positivity.',image:'https://images.pexels.com/photos/25050399/pexels-photo-25050399.jpeg?auto=compress&cs=tinysrgb&w=420',alt:'Golden festive lights glowing in the night',go:()=>navigate('celebrate')},
+    {title:'Send a Note, Not a Template',copy:'Write a heartfelt wish with our beautiful card editor.',image:'https://images.pexels.com/photos/8819385/pexels-photo-8819385.jpeg?auto=compress&cs=tinysrgb&w=420',alt:'A beautifully wrapped festive gift',go:()=>navigate('wishes')},
+    {title:'Leave a Little Light On',copy:'Explore simple ideas to make this Diwali more meaningful.',image:'https://www.uel.ac.uk/sites/default/files/2025-10/AdobeStock_465253019.jpeg',alt:'Colourful traditional rangoli decoration',go:()=>navigate('celebrate')}
   ];
   const shortcuts=[
-    {label:'For Home',sub:'Decor & ideas',icon:'🪔',go:()=>navigate('celebrate')},
-    {label:'For Family',sub:'Warm wishes',icon:'♔',go:()=>navigate('about')},
-    {label:'For Friends',sub:'Shareable cards',icon:'♧',go:()=>navigate('wishes')},
-    {label:'For Inspiration',sub:'Quotes & thoughts',icon:'♡',go:()=>navigate('wishes')},
-    {label:'For You',sub:'Small rituals',icon:'▦',go:()=>navigate('celebrate')}
+    {label:'For Home',sub:'Decor & ideas',icon:<Flame size={29}/>,go:()=>navigate('celebrate')},
+    {label:'For Family',sub:'Warm wishes',icon:<Gift size={29}/>,go:()=>navigate('about')},
+    {label:'For Friends',sub:'Shareable cards',icon:<Users size={29}/>,go:()=>navigate('wishes')},
+    {label:'For Inspiration',sub:'Quotes & thoughts',icon:<Heart size={29}/>,go:()=>navigate('wishes')},
+    {label:'For You',sub:'Small rituals',icon:<CalendarDays size={27}/>,go:()=>navigate('celebrate')}
   ];
   return <div className="home-page reference-home">
     <section className="reference-hero">
@@ -129,9 +129,8 @@ function Home({navigate}:{navigate:(s:Section)=>void}){
         <div className="reference-project-copy"><span className="reference-section-kicker">DESIGN, CREATE & CELEBRATE</span><h2>A little design.<br/>A little <em>code.</em></h2><p>Interactive tools and creative mini-projects inspired by the spirit of Diwali.</p></div>
         <div className="reference-project-grid">{projects.map((p,i)=><a className={'reference-project-card '+p.tone} key={p.name} href={p.url} target="_blank" rel="noreferrer"><span className="reference-project-mark">{p.mark}</span><strong>{p.name}</strong><small>{i===0?'Explore Diwali typography':i===1?'A creative workspace for designers':i===2?'Preview your festive packaging':'Build festive projects with AI'} <ArrowUpRight size={13}/></small></a>)}</div>
       </div>
-      <div className="reference-bottom-diya"><Rangoli small/><img src={diyaAsset} alt="A glowing diya at the centre of a rangoli"/></div>
+      <div className="reference-bottom-diya"><Rangoli small/><span className="reference-real-diya" role="img" aria-label="A glowing terracotta diya"/></div>
     </section>
-    <section className="reference-closing page-width"><span>WISHING YOU LIGHT, LOVE & NEW BEGINNINGS</span><h2>May your world<br/><em>glow a little brighter.</em></h2><button className="reference-primary" onClick={()=>navigate('wishes')}>Create a Diwali Wish <ArrowRight size={15}/></button></section>
   </div>
 }
 

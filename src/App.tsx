@@ -66,7 +66,7 @@ export default function App(){
   const navigate=(s:Section)=>{setSection(s);location.hash=s==='home'?'':'#'+s;setMenu(false);window.scrollTo({top:0,behavior:'smooth'})}
   const light=(i:number)=>setLit(old=>old.includes(i)?old.filter(x=>x!==i):[...old,i])
   const playChime=()=>{if(!sound)return;try{const Ctx=window.AudioContext||((window as unknown as {webkitAudioContext?:typeof AudioContext}).webkitAudioContext);if(!Ctx)return;audio.current??=new Ctx();const c=audio.current,o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.value=660;g.gain.setValueAtTime(.0001,c.currentTime);g.gain.exponentialRampToValueAtTime(volume*.16,c.currentTime+.03);g.gain.exponentialRampToValueAtTime(.0001,c.currentTime+.7);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+.72)}catch{/* Audio is an optional enhancement. */}}
-  const makeWish=()=>{const name=to.trim()||'someone dear';const lines=tone==='joyful'?[`Happy Diwali, ${name}!`,'Hope the house is full of laughter, the sweets disappear too quickly, and the year ahead brings lovely surprises.']:tone==='simple'?[`A beautiful Diwali to you, ${name}.`,'Wishing you peace at home, light in your heart, and good things in the days ahead.']:[`Thinking of you this Diwali, ${name}.`,'May there be warmth around your table, familiar voices at your door, and enough little moments to remember long after the lights come down.'];setWish(lines.join('\n\n'))}
+  const makeWish=()=>{const name=to.trim();const greeting=name?`, ${name}`:'';const lines=tone==='joyful'?[`Happy Diwali${greeting}!`,'Hope the house is full of laughter, the sweets disappear too quickly, and the year ahead brings lovely surprises.']:tone==='simple'?[`A beautiful Diwali${name?` to you, ${name}`:''}.`,'Wishing you peace at home, light in your heart, and good things in the days ahead.']:[`Thinking of you this Diwali${greeting}.`,'May there be warmth around your table, familiar voices at your door, and enough little moments to remember long after the lights come down.'];setWish(lines.join('\n\n'))}
   const copyWish=async()=>{try{await navigator.clipboard.writeText(`${wish}\n\nWith love, ${from||'Akhil'}`);setCopied(true);setTimeout(()=>setCopied(false),1800)}catch{setCopied(false)}}
   const greeting=wish||'May there be warmth around your table, familiar voices at your door, and enough little moments to remember long after the lights come down.'
   return <div className="site-shell">
@@ -120,31 +120,44 @@ function Wishes({to,setTo,from,setFrom,tone,setTone,makeWish,wish,copyWish,copie
   const exportCard=async()=>{
     setExporting(true)
     try{
-      const canvas=document.createElement('canvas');canvas.width=1080;canvas.height=1350
+      const canvas=document.createElement('canvas');canvas.width=1600;canvas.height=900
       const ctx=canvas.getContext('2d');if(!ctx)throw new Error('Canvas unavailable')
-      const W=1080,H=1350
+      const W=1600,H=900
       ctx.fillStyle='#f5ecdf';ctx.fillRect(0,0,W,H)
       ctx.strokeStyle='#c49a68';ctx.lineWidth=2;ctx.strokeRect(42,42,W-84,H-84)
       ctx.strokeStyle='#d9bea0';ctx.lineWidth=1;ctx.strokeRect(58,58,W-116,H-116)
-      ctx.textAlign='center';ctx.fillStyle='#9d155f';ctx.font='500 24px Georgia';ctx.fillText('✳  A LITTLE NOTE FOR YOU  ✳',W/2,145)
-      ctx.fillStyle='#b77b30';ctx.font='22px Georgia';ctx.fillText('✦',W/2,205)
+      ctx.textAlign='center';ctx.fillStyle='#9d155f';ctx.font='500 24px Georgia';ctx.fillText('✳  A LITTLE NOTE FOR YOU  ✳',W/2,132)
+      ctx.fillStyle='#b77b30';ctx.font='22px Georgia';ctx.fillText('✦',W/2,184)
       const art=new Image();art.src=diyaAsset
       await new Promise<void>((resolve,reject)=>{art.onload=()=>resolve();art.onerror=()=>reject(new Error('Diya artwork failed to load'))})
-      ctx.drawImage(art,W/2-115,245,230,230)
-      ctx.fillStyle='#33242b';ctx.font='italic 34px Georgia'
-      let y=565
-      for(const paragraph of wish.split('\n\n')){
-        let line=''
-        for(const word of paragraph.split(/\s+/)){
-          const test=line?line+' '+word:word
-          if(ctx.measureText(test).width>790&&line){ctx.fillText(line,W/2,y);y+=53;line=word}else line=test
+      ctx.drawImage(art,W/2-82,205,164,164)
+      const paragraphs=wish.split('\\n\\n')
+      const maxWidth=1260
+      let fontSize=34
+      const getLines=(size:number)=>{
+        ctx.font='italic '+size+'px Georgia'
+        const lines:string[]=[]
+        for(const paragraph of paragraphs){
+          let line=''
+          for(const word of paragraph.split(/\\s+/)){
+            const test=line?line+' '+word:word
+            if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=word}else line=test
+          }
+          if(line)lines.push(line)
+          lines.push('')
         }
-        if(line){ctx.fillText(line,W/2,y);y+=53}
-        y+=22
+        if(lines[lines.length-1]==='')lines.pop()
+        return lines
       }
-      ctx.fillStyle='#9d155f';ctx.font='600 19px Arial';ctx.fillText('WITH LOVE, '+(from.trim()||'AKHIL').toUpperCase(),W/2,Math.min(y+25,1120))
-      ctx.fillStyle='#8b7668';ctx.font='16px Arial';ctx.fillText('DIWALI 2026  ·  HYDERABAD',W/2,1190)
-      ctx.fillStyle='#b77b30';ctx.font='24px Georgia';ctx.fillText('✳     ✦     ✳',W/2,1240)
+      let lines=getLines(fontSize)
+      while(lines.length*48>310&&fontSize>27){fontSize-=1;lines=getLines(fontSize)}
+      ctx.fillStyle='#33242b';ctx.font='italic '+fontSize+'px Georgia'
+      let y=455
+      for(const line of lines){if(line){ctx.fillText(line,W/2,y);y+=48}else y+=14}
+      const signY=Math.min(Math.max(y+15,650),735)
+      ctx.fillStyle='#9d155f';ctx.font='600 19px Arial';ctx.fillText('WITH LOVE, '+(from.trim()||'AKHIL').toUpperCase(),W/2,signY)
+      ctx.fillStyle='#8b7668';ctx.font='16px Arial';ctx.fillText('DIWALI 2026  ·  HYDERABAD',W/2,790)
+      ctx.fillStyle='#b77b30';ctx.font='24px Georgia';ctx.fillText('✳     ✦     ✳',W/2,825)
       const link=document.createElement('a');link.download='diwali-greeting-'+(to.trim()||'for-you').toLowerCase().replace(/[^a-z0-9]+/g,'-')+'.png';link.href=canvas.toDataURL('image/png');link.click()
     }catch(error){console.error(error);alert('The greeting image could not be exported. Please try again.')}
     finally{setExporting(false)}

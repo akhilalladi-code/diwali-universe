@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
+import type { RefObject } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowDown, ArrowRight, ArrowUpRight, AudioLines, Check, Copy, Flame, Flower2, Github, Heart, Menu, Moon, Pause, Play, Send, Sparkles, Sun, Volume2, VolumeX, X } from 'lucide-react'
+import { ArrowDown, ArrowRight, ArrowUpRight, Check, Copy, Flame, Github, Heart, Menu, Moon, Pause, Play, Send, Sparkles, Sun, Volume2, VolumeX, X } from 'lucide-react'
 
 type Section = 'home' | 'celebrate' | 'wishes' | 'about'
 type Particle = { x:number; y:number; vx:number; vy:number; life:number; max:number; hue:number; size:number; trail:{x:number;y:number}[] }
@@ -12,7 +13,7 @@ const projects = [
   {name:'Claude Code at ₹0',kind:'Notes from learning by making',url:'https://akhilalladi-code.github.io/claude-code-at-zero-cost/',mark:'⌘',tone:'rose'},
 ]
 
-function useFireworks(active:boolean,canvasRef:React.RefObject<HTMLCanvasElement|null>) {
+function useFireworks(active:boolean,canvasRef:RefObject<HTMLCanvasElement|null>) {
   const particles=useRef<Particle[]>([])
   const rockets=useRef<{x:number;y:number;tx:number;ty:number;speed:number;hue:number}[]>([])
   useEffect(()=>{
@@ -34,9 +35,9 @@ function useFireworks(active:boolean,canvasRef:React.RefObject<HTMLCanvasElement
       raf=requestAnimationFrame(loop)
     }
     loop()
-    const click=(e:PointerEvent)=>{if(!active)return;burst(e.clientX,e.clientY,[38,330,160,22][Math.floor(Math.random()*4)])}
-    canvas.addEventListener('pointerdown',click)
-    return()=>{cancelAnimationFrame(raf);window.removeEventListener('resize',resize);canvas.removeEventListener('pointerdown',click)}
+    const click=(e:PointerEvent)=>{if(!active)return;if((e.target as HTMLElement)?.closest('button,a,input,select,textarea'))return;burst(e.clientX,e.clientY,[38,330,160,22][Math.floor(Math.random()*4)])}
+    window.addEventListener('pointerdown',click)
+    return()=>{cancelAnimationFrame(raf);window.removeEventListener('resize',resize);window.removeEventListener('pointerdown',click)}
   },[active,canvasRef])
   return ()=>{const x=innerWidth*(.2+Math.random()*.6),y=innerHeight*(.15+Math.random()*.35);const hue=[35,330,155,18][Math.floor(Math.random()*4)];for(let i=0;i<48;i++){const a=Math.random()*Math.PI*2,s=1+Math.random()*4;particles.current.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:55,max:55,hue,size:1+Math.random()*2,trail:[]})}}
 }
@@ -77,7 +78,7 @@ export default function App(){
     </header>
     <AnimatePresence mode="wait">
       <motion.main key={section} initial={{opacity:0,y:12}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-8}} transition={{duration:.38,ease:[.22,.61,.36,1]}}>
-        {section==='home'&&<Home navigate={navigate} launch={launch}/>}
+        {section==='home'&&<Home navigate={navigate} launch={launch} sound={sound} setSound={setSound} volume={volume} setVolume={setVolume}/>}
         {section==='celebrate'&&<Celebrate lit={lit} light={light} playChime={playChime} continuous={continuous} setContinuous={setContinuous} launch={launch}/>}
         {section==='wishes'&&<Wishes to={to} setTo={setTo} from={from} setFrom={setFrom} tone={tone} setTone={setTone} makeWish={makeWish} wish={greeting} copyWish={copyWish} copied={copied}/>}
         {section==='about'&&<About/>}
@@ -87,7 +88,7 @@ export default function App(){
   </div>
 }
 
-function Home({navigate,launch}:{navigate:(s:Section)=>void;launch:()=>void}){
+function Home({navigate,launch}:{navigate:(s:Section)=>void;launch:()=>void;sound:boolean;setSound:(v:boolean)=>void;volume:number;setVolume:(v:number)=>void}){
   return <div className="home-page">
     <section className="home-hero page-width">
       <div className="hero-note"><span className="hand-line"/> A LITTLE FESTIVE CORNER OF THE INTERNET</div>
@@ -104,7 +105,7 @@ function Home({navigate,launch}:{navigate:(s:Section)=>void;launch:()=>void}){
 }
 
 function Celebrate({lit,light,playChime,continuous,setContinuous,launch}:{lit:number[];light:(i:number)=>void;playChime:()=>void;continuous:boolean;setContinuous:(v:boolean)=>void;launch:()=>void}){
-  return <section className="celebrate-page page-width"><div className="page-heading"><span className="section-number">A SMALL RITUAL</span><h1>One flame at<br/><em>a time.</em></h1><p>Tap a diya to light it. Nothing more complicated than that.</p></div><div className="diya-ritual"><div className="ritual-top"><span>THE LITTLE ROW OF LIGHTS</span><span>{lit.length} OF 5 LIT</span></div><div className="diya-row">{Array.from({length:5},(_,i)=><button key={i} className={lit.includes(i)?'ritual-diya is-lit':'ritual-diya'} onClick={()=>{light(i);playChime()}} aria-pressed={lit.includes(i)}><span className="ritual-flame"/><img src="./assets/diya-art.svg" alt=""/><small>{['For home','For family','For friends','For hope','For you'][i]}</small></button>)}</div><div className="ritual-bottom"><span>{lit.length===5?'All five are glowing. Keep that feeling.':'A little light goes a long way.'}</span><button onClick={()=>{for(let i=0;i<5;i++)light(i)}}>Light them all <Flame size={14}/></button></div></div><div className="firework-invite"><div><span className="section-number">WHEN THE SKY GETS DARK</span><h2>Shall we make<br/>a little <em>noise?</em></h2><p>Turn on a few fireworks. Tap the open space to make your own bursts.</p></div><div className="firework-actions"><button className="button-plum" onClick={launch}>A little sparkle <Sparkles size={15}/></button><button className={continuous?'button-outline selected':'button-outline'} onClick={()=>setContinuous(!continuous)}>{continuous?<Pause size={14}/>:<Play size={14}/>} {continuous?'Pause the sky':'Keep them coming'}</button></div></div></section>
+  return <section className="celebrate-page page-width"><div className="page-heading"><span className="section-number">A SMALL RITUAL</span><h1>One flame at<br/><em>a time.</em></h1><p>Tap a diya to light it. Nothing more complicated than that.</p></div><div className="diya-ritual"><div className="ritual-top"><span>THE LITTLE ROW OF LIGHTS</span><span>{lit.length} OF 5 LIT</span></div><div className="diya-row">{Array.from({length:5},(_,i)=><button key={i} className={lit.includes(i)?'ritual-diya is-lit':'ritual-diya'} onClick={()=>{light(i);playChime()}} aria-pressed={lit.includes(i)}><span className="ritual-flame"/><img src="./assets/diya-art.svg" alt=""/><small>{['For home','For family','For friends','For hope','For you'][i]}</small></button>)}</div><div className="ritual-bottom"><span>{lit.length===5?'All five are glowing. Keep that feeling.':'A little light goes a long way.'}</span><button onClick={()=>{for(let i=0;i<5;i++)if(!lit.includes(i))light(i)}}>Light them all <Flame size={14}/></button></div></div><div className="firework-invite"><div><span className="section-number">WHEN THE SKY GETS DARK</span><h2>Shall we make<br/>a little <em>noise?</em></h2><p>Turn on a few fireworks. Tap the open space to make your own bursts.</p></div><div className="firework-actions"><button className="button-plum" onClick={launch}>A little sparkle <Sparkles size={15}/></button><button className={continuous?'button-outline selected':'button-outline'} onClick={()=>setContinuous(!continuous)}>{continuous?<Pause size={14}/>:<Play size={14}/>} {continuous?'Pause the sky':'Keep them coming'}</button><button className="button-outline" onClick={()=>setSound(!sound)}>{sound?<Volume2 size={14}/>:<VolumeX size={14}/>} Sound {sound?'on':'off'}</button>{sound&&<label className="volume-control">A little softer <input aria-label="Sound volume" type="range" min="0" max="1" step=".05" value={volume} onChange={e=>setVolume(Number(e.target.value))}/></label>}</div></div></section>
 }
 
 function Wishes({to,setTo,from,setFrom,tone,setTone,makeWish,wish,copyWish,copied}:{to:string;setTo:(v:string)=>void;from:string;setFrom:(v:string)=>void;tone:string;setTone:(v:string)=>void;makeWish:()=>void;wish:string;copyWish:()=>void;copied:boolean}){

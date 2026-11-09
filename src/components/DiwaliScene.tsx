@@ -40,7 +40,6 @@ export default function DiwaliScene() {
       new THREE.LatheGeometry(bowlProfile, 96),
       new THREE.MeshPhysicalMaterial({ color: 0x9d155f, metalness: 0.68, roughness: 0.24, clearcoat: 0.9, clearcoatRoughness: 0.18 })
     )
-    bowl.rotation.x = Math.PI
     bowl.position.y = -0.2
     scene.add(bowl)
 

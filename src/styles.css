@@ -18,3 +18,5 @@
   .home-lights-panel{padding:17px 12px 13px}
   .home-diya-row{padding:18px 0 16px}
 }
+
+.wish-export-actions{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #9b774d30}.wish-export-actions .copy-button{border-top:0;min-width:0}.wish-export-actions .export-image-button{border-left:1px solid #9b774d30;background:#9d155f08;font-weight:600}.wish-export-actions button:disabled{opacity:.55;cursor:wait}@media(max-width:520px){.wish-export-actions{grid-template-columns:1fr}.wish-export-actions .export-image-button{border-left:0;border-top:1px solid #9b774d30}}

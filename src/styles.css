@@ -91,7 +91,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{
   padding-block:88px 96px;
 }
 .projects-inner{grid-template-columns:minmax(240px,.72fr) minmax(0,1.28fr);gap:clamp(32px,6vw,84px)}
-.project-cards{gap:0;border-top:1px solid rgba(67,44,39,.22)}
+.project-cards{grid-template-columns:1fr;gap:0;border-top:1px solid rgba(67,44,39,.22)}
 .project-card,
 .project-card.plum,.project-card.leaf,.project-card.saffron,.project-card.rose{
   min-height:126px;

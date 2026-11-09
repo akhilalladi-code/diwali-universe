@@ -27,7 +27,7 @@ function useFireworks(active:boolean,canvasRef:RefObject<HTMLCanvasElement|null>
     const burst=(x:number,y:number,hue:number)=>{const count=38+Math.floor(Math.random()*26);for(let i=0;i<count;i++){const a=Math.random()*Math.PI*2,s=1+Math.random()*4.2;particles.current.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:48+Math.random()*35,max:83,hue:hue+Math.random()*34-17,size:1+Math.random()*2.1,trail:[]})}}
     const loop=()=>{
       frame++
-      ctx.fillStyle='rgba(34, 17, 31, 0.18)';ctx.fillRect(0,0,innerWidth,innerHeight)
+      ctx.clearRect(0,0,innerWidth,innerHeight)
       if(active&&frame%18===0)rockets.current.push({x:innerWidth*(.16+Math.random()*.68),y:innerHeight+10,tx:innerWidth*(.15+Math.random()*.7),ty:innerHeight*(.12+Math.random()*.48),speed:7+Math.random()*3,hue:[35,330,155,18][Math.floor(Math.random()*4)]})
       rockets.current=rockets.current.filter(r=>{const dx=r.tx-r.x,dy=r.ty-r.y,d=Math.hypot(dx,dy);if(d<r.speed+4){burst(r.x,r.y,r.hue);return false}r.x+=dx/d*r.speed;r.y+=dy/d*r.speed;ctx.beginPath();ctx.arc(r.x,r.y,2,0,Math.PI*2);ctx.fillStyle='hsl('+r.hue+' 90% 72%)';ctx.fill();return true})
       particles.current=particles.current.filter(p=>p.life>0)

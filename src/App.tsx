@@ -132,7 +132,7 @@ function Wishes({to,setTo,from,setFrom,tone,setTone,makeWish,wish,copyWish,copie
       const art=new Image();art.src=diyaAsset
       await new Promise<void>((resolve,reject)=>{art.onload=()=>resolve();art.onerror=()=>reject(new Error('Diya artwork failed to load'))})
       ctx.drawImage(art,W/2-82,205,164,164)
-      const paragraphs=wish.split('\\n\\n')
+      const paragraphs=wish.split(/\r?\n\s*\r?\n/)
       const maxWidth=1260
       let fontSize=34
       const getLines=(size:number)=>{
@@ -140,7 +140,7 @@ function Wishes({to,setTo,from,setFrom,tone,setTone,makeWish,wish,copyWish,copie
         const lines:string[]=[]
         for(const paragraph of paragraphs){
           let line=''
-          for(const word of paragraph.split(/\\s+/)){
+          for(const word of paragraph.trim().split(/\s+/)){
             const test=line?line+' '+word:word
             if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=word}else line=test
           }

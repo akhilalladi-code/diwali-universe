@@ -599,3 +599,16 @@ body{background:#fff4e8;color:var(--ink)}
  .reference-project-inner{grid-template-columns:1fr}
  .site-shell:has(.reference-home)>.site-footer{display:none}
 }
+
+/* Bottom festival centerpiece — detailed diya on a full rangoli, as in the reference */
+.reference-project-section{padding-bottom:clamp(160px,15vw,225px)}
+.reference-project-section:after{height:30px;opacity:.5;background-image:repeating-linear-gradient(135deg,transparent 0 8px,#d8a06a 8px 9px,transparent 9px 16px),radial-gradient(ellipse at 50% 0%,#e6bf91 0 1px,transparent 2px);background-size:auto,22px 18px}
+.reference-bottom-diya{bottom:clamp(18px,2vw,30px);width:min(620px,56vw);height:clamp(120px,11vw,168px);display:flex;align-items:center;justify-content:center;isolation:isolate}
+.reference-rangoli-art{position:absolute;inset:0;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 2px 2px #8c541622)}
+.reference-diya-art{position:relative;z-index:2;width:clamp(104px,10vw,150px);height:auto;overflow:visible;transform:translateY(12px);filter:drop-shadow(0 7px 5px #67330d38)}
+.reference-real-diya{display:none}
+@media(max-width:600px){
+ .reference-project-section{padding-bottom:155px}
+ .reference-bottom-diya{width:88vw;height:125px;bottom:18px}
+ .reference-diya-art{width:108px}
+}

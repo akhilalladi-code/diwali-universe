@@ -1,49 +1,52 @@
-# Diwali, at Home — Akhil Alladi
+# Diwali Universe
 
-A scene-driven Diwali experience built around real illustration assets, small rituals and purposeful motion.
+A small, scene-led Diwali experience by Akhil Alladi. Explore a virtual diya ritual, make a little fireworks display, create a personal greeting and learn about the maker.
 
 **Live site:** https://akhilalladi-code.github.io/diwali-universe/
 
-## Stack
+## Built with
 
-- React 19 + TypeScript
+- React 19 and TypeScript
 - Vite
-- Tailwind CSS v4
-- Framer Motion for scene transitions and shared-element movement
-- Canvas for interactive fireworks
+- Framer Motion for section transitions
+- Canvas for optional fireworks
 - Lucide React icons
+- CSS design tokens and responsive layouts
 
-## The experience
+## Experience
 
-1. **The arrival** — a short, illustrated diya entrance and a focused headline.
-2. **The little lights** — five diya objects with individual hover behaviour and lighting states.
-3. **The celebration** — interactive canvas fireworks, with optional continuous bursts.
-4. **A note for someone** — a personalised greeting composer with copy-to-clipboard.
-5. **The maker** — a quiet closing scene with project links.
+1. **Home** — an editorial Diwali landing page with festival ideas and selected creative projects.
+2. **Little Lights** — light five virtual diyas individually, light them all, or reset the ritual.
+3. **Create & Share** — compose a greeting, choose its tone, copy the message or export a PNG card.
+4. **Our Story** — a short note about the maker and the project.
 
-The existing diya illustration in `public/assets/diya-art.svg` is the primary hero and ritual asset. It is reused rather than replaced with generic stock photography. There are no commercial products in this personal festival project, so the product-inspired scene is expressed through five meaningful diya rituals rather than invented product listings.
+## Accessibility and preferences
 
-## Local development
+- Keyboard-accessible navigation with a skip link, visible focus styles and Escape-to-close mobile navigation.
+- Section changes move focus to the main content.
+- Selected controls expose their state to assistive technology.
+- The site respects the operating system's reduced-motion preference; fireworks are disabled when reduced motion is requested.
+- Sound starts off and can be enabled by the visitor.
+- Light and dark themes are supported across the main experience.
+
+## Development
 
 ```bash
 npm install
 npm run dev
 ```
 
-## Production build
+Create a production build:
 
 ```bash
 npm run build
 npm run preview
 ```
 
-## Motion and accessibility
-
-- Intro motion is short and can be reduced by the user's system preference.
-- The diya uses a shared Framer Motion layout transition from the arrival scene into the first ritual object.
-- Fireworks are user-triggered or can be paused; sound is opt-in.
-- Layouts are designed for desktop, tablet and mobile.
-
 ## Deployment
 
-GitHub Actions builds the Vite `dist/` output and deploys it to GitHub Pages.
+GitHub Actions builds the Vite `dist/` directory and deploys it to GitHub Pages:
+
+https://akhilalladi-code.github.io/diwali-universe/
+
+The repository uses a Vite base path of `/diwali-universe/` for project-page asset URLs.

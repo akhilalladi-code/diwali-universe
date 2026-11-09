@@ -90,7 +90,7 @@ export default function App(){
     <header className="site-header">
       <button className="wordmark" onClick={()=>navigate('home')} aria-label="Go home"><img src={diyaAsset} alt=""/><span>Diwali <i>Universe</i></span></button>
       <nav className={menu?'main-nav open':'main-nav'} aria-label="Main navigation">
-        {([{id:'home',label:'Home'},{id:'celebrate',label:'Little Lights'},{id:'wishes',label:'Create & Share'},{id:'about',label:'Our Story'}] as {id:Section;label:string}[]).map((item,i)=><button key={item.label} className={section===item.id?'nav-active':''} onClick={()=>navigate(item.id)}>{item.label}</button>)}
+        {([{id:'home',label:'Home'},{id:'celebrate',label:'Little Lights'},{id:'wishes',label:'Create & Share'},{id:'about',label:'Our Story'}] as {id:Section;label:string}[]).map(item=><button key={item.label} className={section===item.id?'nav-active':''} onClick={()=>navigate(item.id)}>{item.label}</button>)}
       </nav>
       <div className="header-actions"><button className="icon-button" onClick={()=>setDark(!dark)} aria-label="Toggle night mode">{dark?<Sun size={17}/>:<Moon size={17}/>}</button><button className="menu-button" onClick={()=>setMenu(!menu)} aria-label="Toggle menu">{menu?<X/>:<Menu/>}</button><button className="header-cta" onClick={()=>navigate('celebrate')}><Flame size={13}/> Light a Virtual Diya <ArrowUpRight size={14}/></button></div>
     </header>

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import type { RefObject } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowDown, ArrowRight, ArrowUpRight, Check, Copy, Flame, Github, Heart, Menu, Moon, Pause, Play, Send, Sparkles, Sun, Volume2, VolumeX, X } from 'lucide-react'
+import { ArrowDown, ArrowRight, ArrowUpRight, Check, Copy, Download, Flame, Github, Heart, Menu, Moon, Pause, Play, Send, Sparkles, Sun, Volume2, VolumeX, X } from 'lucide-react'
 
 type Section = 'home' | 'celebrate' | 'wishes' | 'about'
 
@@ -116,7 +116,39 @@ function Celebrate({lit,light,playChime,continuous,setContinuous,launch,sound,se
 }
 
 function Wishes({to,setTo,from,setFrom,tone,setTone,makeWish,wish,copyWish,copied}:{to:string;setTo:(v:string)=>void;from:string;setFrom:(v:string)=>void;tone:string;setTone:(v:string)=>void;makeWish:()=>void;wish:string;copyWish:()=>void;copied:boolean}){
-  return <section className="wishes-page page-width"><div className="page-heading"><span className="section-number">A NOTE, JUST FOR YOU</span><h1>Words from<br/><em>the heart.</em></h1><p>A greeting doesn't have to be grand. It just has to feel like it came from you.</p></div><div className="wish-maker"><form onSubmit={e=>{e.preventDefault();makeWish()}}><label htmlFor="wish-to">Who are you thinking of?</label><input id="wish-to" value={to} onChange={e=>setTo(e.target.value)} placeholder="Their name" maxLength={50}/><label htmlFor="wish-from">And it's from...</label><input id="wish-from" value={from} onChange={e=>setFrom(e.target.value)} placeholder="Your name" maxLength={50}/><label>What sort of note?</label><div className="tone-options">{[['heartfelt','Heartfelt'],['joyful','A little silly'],['simple','Simple & warm']].map(([v,l])=><button type="button" key={v} className={tone===v?'tone-active':''} onClick={()=>setTone(v)}>{l}</button>)}</div><button className="button-plum submit-wish" type="submit">Write my note <ArrowRight size={15}/></button></form><div className="wish-preview"><div className="preview-top"><span>✳ A LITTLE NOTE FOR YOU</span><Heart size={15}/></div><div className="preview-body"><img src={diyaAsset} alt=""/><p>{wish.split('\n\n').map((s,i)=><span key={i}>{s}</span>)}</p><small>WITH LOVE, {from||'AKHIL'}</small></div><button className="copy-button" onClick={copyWish}><Copy size={14}/>{copied?'Copied — go make someone smile':'Copy this little note'}{copied&&<Check size={14}/>}</button></div></div></section>
+  const [exporting,setExporting]=useState(false)
+  const exportCard=async()=>{
+    setExporting(true)
+    try{
+      const canvas=document.createElement('canvas');canvas.width=1080;canvas.height=1350
+      const ctx=canvas.getContext('2d');if(!ctx)throw new Error('Canvas unavailable')
+      const W=1080,H=1350
+      ctx.fillStyle='#f5ecdf';ctx.fillRect(0,0,W,H)
+      ctx.strokeStyle='#c49a68';ctx.lineWidth=2;ctx.strokeRect(42,42,W-84,H-84)
+      ctx.strokeStyle='#d9bea0';ctx.lineWidth=1;ctx.strokeRect(58,58,W-116,H-116)
+      ctx.textAlign='center';ctx.fillStyle='#9d155f';ctx.font='500 24px Georgia';ctx.fillText('✳  A LITTLE NOTE FOR YOU  ✳',W/2,145)
+      ctx.fillStyle='#b77b30';ctx.font='22px Georgia';ctx.fillText('✦',W/2,205)
+      const art=new Image();art.src=diyaAsset
+      await new Promise<void>((resolve,reject)=>{art.onload=()=>resolve();art.onerror=()=>reject(new Error('Diya artwork failed to load'))})
+      ctx.drawImage(art,W/2-115,245,230,230)
+      ctx.fillStyle='#33242b';ctx.font='italic 34px Georgia'
+      let y=565
+      for(const paragraph of wish.split('\n\n')){
+        let line=''
+        for(const word of paragraph.split(/\s+/)){
+          const test=line?line+' '+word:word
+          if(ctx.measureText(test).width>790&&line){ctx.fillText(line,W/2,y);y+=53;line=word}else line=test
+        }
+        if(line){ctx.fillText(line,W/2,y);y+=53}
+        y+=22
+      }
+      ctx.fillStyle='#9d155f';ctx.font='600 19px Arial';ctx.fillText('WITH LOVE, '+(from.trim()||'AKHIL').toUpperCase(),W/2,Math.min(y+25,1120))
+      ctx.fillStyle='#8b7668';ctx.font='16px Arial';ctx.fillText('DIWALI 2026  ·  HYDERABAD',W/2,1190)
+      ctx.fillStyle='#b77b30';ctx.font='24px Georgia';ctx.fillText('✳     ✦     ✳',W/2,1240)
+      const link=document.createElement('a');link.download='diwali-greeting-'+(to.trim()||'for-you').toLowerCase().replace(/[^a-z0-9]+/g,'-')+'.png';link.href=canvas.toDataURL('image/png');link.click()
+    }catch(error){console.error(error);alert('The greeting image could not be exported. Please try again.')}
+    finally{setExporting(false)}
+  }
+  return <section className="wishes-page page-width"><div className="page-heading"><span className="section-number">A NOTE, JUST FOR YOU</span><h1>Words from<br/><em>the heart.</em></h1><p>A greeting doesn't have to be grand. It just has to feel like it came from you.</p></div><div className="wish-maker"><form onSubmit={e=>{e.preventDefault();makeWish()}}><label htmlFor="wish-to">Who are you thinking of?</label><input id="wish-to" value={to} onChange={e=>setTo(e.target.value)} placeholder="Their name" maxLength={50}/><label htmlFor="wish-from">And it's from...</label><input id="wish-from" value={from} onChange={e=>setFrom(e.target.value)} placeholder="Your name" maxLength={50}/><label>What sort of note?</label><div className="tone-options">{[['heartfelt','Heartfelt'],['joyful','A little silly'],['simple','Simple & warm']].map(([v,l])=><button type="button" key={v} className={tone===v?'tone-active':''} onClick={()=>setTone(v)}>{l}</button>)}</div><button className="button-plum submit-wish" type="submit">Write my note <ArrowRight size={15}/></button></form><div className="wish-preview"><div className="preview-top"><span>✳ A LITTLE NOTE FOR YOU</span><Heart size={15}/></div><div className="preview-body"><img src={diyaAsset} alt=""/><p>{wish.split('\n\n').map((s,i)=><span key={i}>{s}</span>)}</p><small>WITH LOVE, {from||'AKHIL'}</small></div><div className="wish-export-actions"><button className="copy-button" onClick={copyWish}><Copy size={14}/>{copied?'Copied — go make someone smile':'Copy this little note'}{copied&&<Check size={14}/>}</button><button className="copy-button export-image-button" onClick={exportCard} disabled={exporting}><Download size={14}/>{exporting?'Preparing image…':'Export as PNG'}</button></div></div></div></section>
 }
-
 function About(){return <section className="about-page page-width"><div className="page-heading"><span className="section-number">A NOTE FROM THE MAKER</span><h1>Made by hand.<br/><em>Well, mostly.</em></h1><p>I'm Akhil — a graphic designer who likes making things, learning new tools and occasionally getting carried away with a side project.</p></div><div className="about-paper"><div className="about-doodle">✳</div><p>This little Diwali corner started with a simple thought: what if a website felt a little more like being at home during the festival? Not another shiny template. Just familiar colours, a lamp, a few small interactions, and a note you could send to someone you care about.</p><p>It's made in Hyderabad, with React, TypeScript, a little Canvas, and a lot of affection for the details.</p><span>— AKHIL ALLADI</span></div></section>}

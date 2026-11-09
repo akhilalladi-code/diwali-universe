@@ -612,3 +612,34 @@ body{background:#fff4e8;color:var(--ink)}
  .reference-bottom-diya{width:88vw;height:125px;bottom:18px}
  .reference-diya-art{width:108px}
 }
+
+/* Final quality pass: accessibility, responsive shortcuts and complete theme coverage */
+:focus-visible{outline:3px solid #a0004b;outline-offset:4px}
+button:focus-visible,a:focus-visible,input:focus-visible{border-radius:4px}
+.reference-shortcut:focus-visible,.reference-idea:focus-visible{outline-offset:-3px}
+.site-shell:has(.reference-home)>.site-footer{display:flex}
+.night-mode .reference-hero-copy h1,.night-mode .reference-ideas-copy h2,.night-mode .reference-project-copy h2{color:#fff1df}
+.night-mode .reference-ideas-copy p,.night-mode .reference-project-copy p{color:#d4c0ad}
+.night-mode .reference-ideas,.night-mode .reference-closing{background:var(--paper)}
+.night-mode .reference-project-section{background:#30252d;border-color:var(--line)}
+.night-mode .reference-idea{color:var(--ink);border-color:var(--line)}
+.night-mode .reference-idea-copy small{color:var(--muted)}
+.night-mode .reference-idea-arrow{background:#382b32;border-color:var(--line);color:#f0b5c9}
+.night-mode .reference-shortcuts{background:rgba(48,37,45,.97);border-color:var(--line)}
+.night-mode .reference-shortcut{color:var(--ink);border-color:var(--line)}
+.night-mode .reference-shortcut small{color:var(--muted)}
+.night-mode .reference-shortcut strong{color:var(--ink)}
+.night-mode .reference-bottom-diya{filter:brightness(.9) saturate(.9)}
+.night-mode .site-footer{color:var(--muted);border-color:var(--line)}
+@media(max-width:600px){
+  .reference-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr));height:auto;bottom:12px;padding:8px}
+  .reference-shortcut{min-height:68px;height:auto;border-right:0;border-bottom:1px solid #ecd4bd}
+  .reference-shortcut:nth-child(odd){border-right:1px solid #ecd4bd}
+  .reference-shortcut:last-child{grid-column:1/-1;border-right:0;border-bottom:0;max-width:50%;width:100%;justify-self:center}
+  .reference-shortcut:nth-last-child(2){border-bottom:0}
+  .reference-hero{height:720px}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto!important}
+  .reference-idea img,.reference-project-card,.button-plum,.hero-photo{transition:none!important}
+}

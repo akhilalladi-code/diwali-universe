@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import type { RefObject } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowDown, ArrowRight, ArrowUpRight, Check, Copy, Download, Flame, Github, Heart, Menu, Moon, Pause, Play, Send, Sparkles, Sun, Volume2, VolumeX, X } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, Check, Copy, Download, Flame, Github, Heart, Menu, Moon, Pause, Play, Send, Sparkles, Sun, Volume2, VolumeX, X } from 'lucide-react'
 
 type Section = 'home' | 'celebrate' | 'wishes' | 'about'
 
@@ -118,11 +118,11 @@ function Home({navigate}:{navigate:(s:Section)=>void}){
           <div className="reference-hero-actions"><button className="reference-primary" onClick={()=>navigate('celebrate')}><Flame size={15}/> Light a Diya <ArrowRight size={15}/></button><button className="reference-secondary" onClick={()=>navigate('wishes')}><Send size={14}/> Share a Wish <ArrowUpRight size={14}/></button></div>
         </div>
       </div>
-      <div className="reference-shortcuts page-width">{shortcuts.map((item,i)=><button key={item.label} className="reference-shortcut" onClick={item.go}><span className="shortcut-icon">{item.icon}</span><strong>{item.label}</strong><small>{item.sub}</small></button>)}</div>
+      <div className="reference-shortcuts page-width">{shortcuts.map(item=><button key={item.label} className="reference-shortcut" onClick={item.go}><span className="shortcut-icon">{item.icon}</span><strong>{item.label}</strong><small>{item.sub}</small></button>)}</div>
     </section>
     <section className="reference-ideas page-width">
       <div className="reference-ideas-copy"><span className="reference-section-kicker">IDEAS, TOOLS & INSPIRATION</span><h2>It’s the small<br/>things that make<br/><em>the evening.</em></h2><p>From a single diya to a thoughtful message, Diwali is about the little moments that bring us closer.</p></div>
-      <div className="reference-idea-list">{ideas.map((idea,i)=><button className="reference-idea" key={idea.title} onClick={idea.go}><img src={idea.image} alt={idea.alt} loading="lazy"/><span className="reference-idea-copy"><strong>{idea.title}</strong><small>{idea.copy}</small></span><span className="reference-idea-arrow"><ArrowRight size={17}/></span></button>)}</div>
+      <div className="reference-idea-list">{ideas.map(idea=><button className="reference-idea" key={idea.title} onClick={idea.go}><img src={idea.image} alt={idea.alt} loading="lazy"/><span className="reference-idea-copy"><strong>{idea.title}</strong><small>{idea.copy}</small></span><span className="reference-idea-arrow"><ArrowRight size={17}/></span></button>)}</div>
     </section>
     <section className="reference-project-section">
       <div className="reference-project-inner page-width">

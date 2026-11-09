@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-labelledby="t d"><title id="t">Diwali diya</title><desc id="d">A vibrant magenta and emerald oil lamp with a golden flame, adapted from Akhil's supplied illustration.</desc>
+<defs><linearGradient id="fl" x2="0" y2="1"><stop stop-color="#fff4b5"/><stop offset=".55" stop-color="#ffc21b"/><stop offset="1" stop-color="#f57a16"/></linearGradient><linearGradient id="bowl" x2="0" y2="1"><stop stop-color="#1c9a83"/><stop offset="1" stop-color="#07584d"/></linearGradient><filter id="glow"><feGaussianBlur stdDeviation="18"/></filter></defs>
+<ellipse cx="300" cy="510" rx="210" ry="40" fill="#ffb13c" opacity=".25" filter="url(#glow)"/>
+<path d="M300 42C245 102 246 162 190 230c-44 54-55 115-8 163 30 31 74 43 118 45 44-2 88-14 118-45 47-48 36-109-8-163C354 162 355 102 300 42Z" fill="url(#fl)" stroke="#100b10" stroke-width="17" stroke-linejoin="round"/>
+<path d="M300 192c-37 38-56 80-48 127 7 37 25 63 48 77 23-14 41-40 48-77 8-47-11-89-48-127Z" fill="#f47719" stroke="#100b10" stroke-width="14" stroke-linejoin="round"/>
+<path d="M80 310C22 328 26 367 52 394c27 27 95 44 150 37 46-6 73-29 98-54 25 25 52 48 98 54 55 7 123-10 150-37 26-27 30-66-28-84-61-19-148-26-220-25-72-1-159 6-220 25Z" fill="#b20d77" stroke="#100b10" stroke-width="17" stroke-linejoin="round"/>
+<path d="M53 400c58 33 157 36 247-17 90 53 189 50 247 17-10 77-93 143-247 143S63 477 53 400Z" fill="url(#bowl)" stroke="#100b10" stroke-width="17" stroke-linejoin="round"/>
+<path d="M77 416c72 31 149 32 223-8 74 40 151 39 223 8-31 59-102 92-223 92S108 475 77 416Z" fill="none" stroke="#43c1a5" stroke-width="18" opacity=".9"/>
+<path d="M102 347c62-20 130-28 198-23-45 45-126 65-198 23Zm396 0c-62-20-130-28-198-23 45 45 126 65 198 23Z" fill="#ffb400" stroke="#100b10" stroke-width="13" stroke-linejoin="round"/>
+<path d="M79 390c67 44 143 47 221 1-38 64-138 84-221-1Zm442 0c-67 44-143 47-221 1 38 64 138 84 221-1Z" fill="#ed0065" opacity=".9"/>
+<circle cx="300" cy="390" r="18" fill="#ffc323" stroke="#100b10" stroke-width="7"/>
+</svg>

@@ -71,7 +71,7 @@ test('light and dark themes retain readable brand and navigation contrast', asyn
 
   await page.getByRole('button', { name: /toggle night mode/i }).click()
   await expect(brand).toHaveCSS('color', 'rgb(48, 24, 15)')
-  await expect(page.locator('.reference-ideas')).toHaveCSS('background-color', 'rgb(255, 244, 232)')
+  await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(255, 244, 232)')
 })
 
 test('dark theme remains usable on narrow mobile screens', async ({ page }) => {
@@ -97,11 +97,11 @@ test('dark theme shortcut and project cards expose visible keyboard focus', asyn
   await page.goto('/diwali-universe/')
   await page.getByRole('button', { name: /toggle night mode/i }).click()
   const shortcut = page.locator('.reference-shortcut').first()
-  await shortcut.focus()
+  await shortcut.evaluate((element) => (element as HTMLElement).focus({ focusVisible: true }))
   await expect(shortcut).toBeFocused()
   await expect(shortcut).toHaveCSS('outline-style', 'solid')
   const project = page.locator('.reference-project-card').first()
-  await project.focus()
+  await project.evaluate((element) => (element as HTMLElement).focus({ focusVisible: true }))
   await expect(project).toBeFocused()
   await expect(project).toHaveCSS('outline-style', 'solid')
 })

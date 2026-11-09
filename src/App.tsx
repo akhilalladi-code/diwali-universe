@@ -129,7 +129,30 @@ function Home({navigate}:{navigate:(s:Section)=>void}){
         <div className="reference-project-copy"><span className="reference-section-kicker">DESIGN, CREATE & CELEBRATE</span><h2>A little design.<br/>A little <em>code.</em></h2><p>Interactive tools and creative mini-projects inspired by the spirit of Diwali.</p></div>
         <div className="reference-project-grid">{projects.map((p,i)=><a className={'reference-project-card '+p.tone} key={p.name} href={p.url} target="_blank" rel="noreferrer"><span className="reference-project-mark">{p.mark}</span><strong>{p.name}</strong><small>{i===0?'Explore Diwali typography':i===1?'A creative workspace for designers':i===2?'Preview your festive packaging':'Build festive projects with AI'} <ArrowUpRight size={13}/></small></a>)}</div>
       </div>
-      <div className="reference-bottom-diya"><Rangoli small/><span className="reference-real-diya" role="img" aria-label="A glowing terracotta diya"/></div>
+      <div className="reference-bottom-diya" aria-label="A traditional diya resting on an intricate rangoli">
+        <svg className="reference-rangoli-art" viewBox="0 0 620 170" aria-hidden="true">
+          <g transform="translate(310 88)" fill="none" stroke="#c87932" strokeWidth="1.15">
+            <circle r="76"/><circle r="65" strokeDasharray="2 4"/><circle r="49"/><circle r="37" strokeDasharray="2 3"/><circle r="20"/>
+            {Array.from({length:16},(_,i)=><g key={i} transform={`rotate(${i*22.5})`}><path d="M0 -19 C-12 -37 -9 -54 0 -68 C9 -54 12 -37 0 -19Z" fill="#e9c79e" fillOpacity=".24"/><path d="M0 -49 C-5 -56 -4 -62 0 -68 C4 -62 5 -56 0 -49Z" fill="#cf8a45" fillOpacity=".35"/></g>)}
+            {Array.from({length:12},(_,i)=><g key={`dot-${i}`} transform={`rotate(${i*30})`}><circle cx="0" cy="-83" r="2.5" fill="#d8893d"/><path d="M0 -91 l-3 -5 m3 5 l3 -5" /></g>)}
+            <path d="M-120 0 Q-90 -18 -76 0 Q-90 18 -120 0 M120 0 Q90 -18 76 0 Q90 18 120 0" />
+          </g>
+          <path d="M28 145 Q75 119 120 145 T212 145 T310 145 T408 145 T500 145 T592 145" fill="none" stroke="#d59a5a" strokeWidth="1.2" opacity=".65"/>
+          <path d="M46 154 q14 -19 28 0 q14 -19 28 0 M518 154 q14 -19 28 0 q14 -19 28 0" fill="none" stroke="#d59a5a" strokeWidth="1.2"/>
+        </svg>
+        <svg className="reference-diya-art" viewBox="0 0 140 112" role="img" aria-label="A glowing traditional terracotta diya">
+          <defs><linearGradient id="clayBowl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#d18a3c"/><stop offset=".35" stopColor="#91430f"/><stop offset="1" stopColor="#4a1c09"/></linearGradient><radialGradient id="clayGlow"><stop stopColor="#ffcf69" stopOpacity=".75"/><stop offset="1" stopColor="#ff9e21" stopOpacity="0"/></radialGradient><linearGradient id="flameGold" x1="0" y1="1" x2="0" y2="0"><stop stopColor="#f36b12"/><stop offset=".5" stopColor="#ffc23e"/><stop offset="1" stopColor="#fff8ce"/></linearGradient></defs>
+          <ellipse cx="70" cy="95" rx="48" ry="9" fill="#6b3515" opacity=".18"/>
+          <ellipse cx="70" cy="89" rx="47" ry="15" fill="url(#clayGlow)"/>
+          <path d="M69 54 C45 30 66 9 72 1 C83 19 92 35 73 55Z" fill="url(#flameGold)" filter="drop-shadow(0 0 7px #ffae37)"/>
+          <path d="M72 48 C62 34 72 22 74 16 C81 31 82 39 72 48Z" fill="#fff9d9"/>
+          <path d="M18 65 Q70 47 122 65 Q116 98 70 100 Q24 98 18 65Z" fill="url(#clayBowl)" stroke="#6b2e0c" strokeWidth="2"/>
+          <ellipse cx="70" cy="65" rx="52" ry="12" fill="#c17a30" stroke="#71330e" strokeWidth="2"/>
+          <ellipse cx="70" cy="64" rx="43" ry="7" fill="#55240b"/>
+          <path d="M28 75 Q70 87 112 75" fill="none" stroke="#e5a24e" strokeWidth="2" opacity=".7"/>
+          <path d="M37 88 Q70 98 103 88" fill="none" stroke="#3e1808" strokeWidth="2" opacity=".65"/>
+        </svg>
+      </div>
     </section>
   </div>
 }
